@@ -15,8 +15,13 @@ public class Player : MonoBehaviour
 
     private bool fX = false;
     private bool isFiring = false;
+    private bool isPlayerDead = false;
 
     [SerializeField] float delayShoot = .25f;
+
+    public int pHealth = 100;
+    public int pLevel = 1;
+    public int damage = 15; 
 
 
     // Start is called before the first frame update
@@ -31,7 +36,7 @@ public class Player : MonoBehaviour
 
     private void Update() {
         RotateGun();
-        
+        killPlayer();
     }
 
     private void FixedUpdate()
@@ -89,8 +94,6 @@ public class Player : MonoBehaviour
         weaponAim.eulerAngles = new Vector3(0, 0, angle);
     }
 
-
-    // MOVE SHOOTGUN AND RESETSHOOT TO THEIR OWN SCRIPT THAT WILL BE PUT ON THE BULLET PREFAB
     private void ShootGun() {
         if (Input.GetKey(KeyCode.Mouse0)) {
             if(isFiring) { return; }
@@ -109,5 +112,18 @@ public class Player : MonoBehaviour
 
     private void ResetShoot() {
         isFiring = false;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision) {
+        if(collision.gameObject.tag == "Enemy") {
+            pHealth -= 10;
+        }
+    }
+
+    private void killPlayer() {
+        if(pHealth <= 0) {
+            isPlayerDead = true;
+            Destroy(gameObject);
+        }
     }
 }

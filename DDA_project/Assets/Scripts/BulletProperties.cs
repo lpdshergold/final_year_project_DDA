@@ -4,15 +4,11 @@ using UnityEngine;
 
 public class BulletProperties : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+    private void OnCollisionEnter2D(Collision2D collision) {
+        if(collision.gameObject.tag == "Wall") {
+            Destroy(gameObject);
+        } else if (collision.gameObject.tag == "Enemy") {
+            Destroy(gameObject);
+        }
     }
 }
