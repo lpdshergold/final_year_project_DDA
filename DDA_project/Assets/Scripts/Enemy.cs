@@ -5,10 +5,8 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] private GameObject player;
-    
+    private GameObject player;
     private Rigidbody2D rb;
-
     private Vector2 playerDirection;
 
     public int moveSpeed = 1;
@@ -18,6 +16,7 @@ public class Enemy : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player");
         rb = gameObject.GetComponent<Rigidbody2D>();
     }
 

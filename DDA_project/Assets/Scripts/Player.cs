@@ -3,28 +3,35 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private int playerSpeed = 2;
     [SerializeField] private Sprite choosenGun;
     [SerializeField] private GameObject weapon;
     [SerializeField] private GameObject bullet;
     [SerializeField] private Transform bulletSpawn;
 
+    [SerializeField] private int playerSpeed = 2;
+    [SerializeField] float delayShoot = .25f;
+    [SerializeField] float destroyBulletTime = 5f;
+    [SerializeField] float bulletSpeed;
+
     private Transform weaponAim;
     private Rigidbody2D rb;
     private SpriteRenderer playerFlip, gun;
+    private GameManager gm;
 
     private bool fX = false;
     private bool isFiring = false;
     private bool isPlayerDead = false;
 
-    [SerializeField] float delayShoot = .25f;
 
-    public int pHealth = 100;
+    public int pHealth;
     public int pLevel = 1;
-    public int damage = 15; 
+    public int damage = 15;
 
+    private void Awake() {
+        // get the GameManager script component
+        gm = GameObject.Find("GameManager").GetComponent<GameManager>();
+    }
 
-    // Start is called before the first frame update
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -32,6 +39,7 @@ public class Player : MonoBehaviour
         gun = weapon.GetComponent<SpriteRenderer>();
         weaponAim = weapon.transform;
         gun.sprite = choosenGun;
+        pHealth = gm.getPlayerHealth();
     }
 
     private void Update() {
@@ -95,17 +103,26 @@ public class Player : MonoBehaviour
     }
 
     private void ShootGun() {
+        // check if left mouse button is clicked
         if (Input.GetKey(KeyCode.Mouse0)) {
+            // if already firing, exit out
             if(isFiring) { return; }
 
             isFiring = true;
-            GameObject b = Instantiate(bullet, bulletSpawn.position, bulletSpawn.rotation);
+            // create the bullet gameObject
+            GameObject shotBullet = Instantiate(bullet, bulletSpawn.position, bulletSpawn.rotation);
+            // check flip direction 
             if (fX) {
-                b.GetComponent<Rigidbody2D>().velocity = bulletSpawn.right * -5f; 
+                // if flipped, reverse velocity
+                shotBullet.GetComponent<Rigidbody2D>().velocity = bulletSpawn.right * -bulletSpeed; 
             } else {
-                b.GetComponent<Rigidbody2D>().velocity = bulletSpawn.right * 5f;
+                // if not flipped, don't reverse velocity
+                shotBullet.GetComponent<Rigidbody2D>().velocity = bulletSpawn.right * bulletSpeed;
             }
-            Destroy(b, 5f);
+
+            // destroy bullet after timer runs out
+            Destroy(shotBullet, destroyBulletTime);
+            // invoke ResetShoot() after delay
             Invoke("ResetShoot", delayShoot);
         }
     }
@@ -114,12 +131,17 @@ public class Player : MonoBehaviour
         isFiring = false;
     }
 
+    // collision function
     private void OnCollisionEnter2D(Collision2D collision) {
+        // check for collision with enemy
         if(collision.gameObject.tag == "Enemy") {
             pHealth -= 10;
         }
+        // update the player health in GameManger
+        gm.setPlayerHealth(pHealth);
     }
 
+    // function to check if the player has 0 health
     private void killPlayer() {
         if(pHealth <= 0) {
             isPlayerDead = true;

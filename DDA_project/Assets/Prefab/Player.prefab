@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 3545643617328414291}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -149,13 +149,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b747e4940fbd634d8f5f0c9a006d238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerSpeed: 3
   choosenGun: {fileID: -5528894423819592419, guid: 8d8feb3b142fa2b43abc24453a8e5500,
     type: 3}
   weapon: {fileID: 3545643617357033872}
   bullet: {fileID: 1016200008348776710, guid: c4d195e6a107bc84ca2894357a714777, type: 3}
   bulletSpawn: {fileID: 3545643617015236288}
-  delayShoot: 0.25
+  playerSpeed: 3
+  delayShoot: 0.5
+  destroyBulletTime: 5
+  bulletSpeed: 8
+  pHealth: 100
+  pLevel: 1
+  damage: 15
 --- !u!61 &3545643617328414291
 BoxCollider2D:
   m_ObjectHideFlags: 0
