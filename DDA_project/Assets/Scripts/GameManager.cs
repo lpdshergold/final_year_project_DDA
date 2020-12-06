@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
 
     private int playerHealth = 100;
     private int playerLevel = 1;
-    private int playerDamage = 15;
+    private int playerDamage = 100;
     private int playerExperiencePoints = 0;
     private bool isPlayerDead = false;
 

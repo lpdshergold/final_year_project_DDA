@@ -12,26 +12,28 @@ public class Enemy : MonoBehaviour
     private EnemyManager em;
     private int playerAtkDamage;
 
-    public int moveSpeed = 1;
-    public int eHealth = 100;
-    public int damage = 15;
+    private float moveSpeed;
+    private int eHealth;
+    private int damage;
 
     private void Awake() {
         // get the GameManager script component
         em = GameObject.Find("EnemyManager").GetComponent<EnemyManager>();
     }
 
-    void Start()
-    {
+    void Start() {
         player = GameObject.FindGameObjectWithTag("Player");
         rb = gameObject.GetComponent<Rigidbody2D>();
+
+        moveSpeed = em.getEnemyMoveSpeed();
+        eHealth = em.getEnemyHealth();
+        damage = em.getEnemyDamage();
 
         playerAtkDamage = em.playerAtkDamage;
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update() {
         DestroyEnemy();
     }
 
@@ -52,6 +54,7 @@ public class Enemy : MonoBehaviour
 
     private void DestroyEnemy() {
         if (eHealth <= 0) {
+            em.enemyAmount--;
             Destroy(gameObject);
         }
     }

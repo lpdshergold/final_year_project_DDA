@@ -34,8 +34,7 @@ public class Player : MonoBehaviour
         gm = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
-    private void Start()
-    {
+    private void Start() {
         rb = GetComponent<Rigidbody2D>();
         playerFlip = GetComponent<SpriteRenderer>();
         gun = weapon.GetComponent<SpriteRenderer>();
@@ -54,8 +53,7 @@ public class Player : MonoBehaviour
         KillPlayer();
     }
 
-    private void FixedUpdate()
-    {
+    private void FixedUpdate() {
         PlayerMovement();
         ShootGun();
     }
