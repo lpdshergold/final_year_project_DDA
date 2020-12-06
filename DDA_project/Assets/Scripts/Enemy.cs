@@ -9,39 +9,48 @@ public class Enemy : MonoBehaviour
     private Rigidbody2D rb;
     private Vector2 playerDirection;
 
+    private EnemyManager em;
+    private int playerAtkDamage;
+
     public int moveSpeed = 1;
     public int eHealth = 100;
-    public int damage = 15; 
+    public int damage = 15;
 
-    // Start is called before the first frame update
+    private void Awake() {
+        // get the GameManager script component
+        em = GameObject.Find("EnemyManager").GetComponent<EnemyManager>();
+    }
+
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         rb = gameObject.GetComponent<Rigidbody2D>();
+
+        playerAtkDamage = em.playerAtkDamage;
     }
 
     // Update is called once per frame
     void Update()
     {
-        destroyEnemy();
+        DestroyEnemy();
     }
 
     private void FixedUpdate() {
-        moveEnemy();
+        MoveEnemy();
     }
 
-    private void moveEnemy() {
+    private void MoveEnemy() {
         playerDirection = player.transform.position - transform.position;
         rb.MovePosition((Vector2)transform.position + (playerDirection * moveSpeed * Time.deltaTime));
     }
 
     private void OnCollisionEnter2D(Collision2D collision) {
         if (collision.gameObject.tag == "Bullet") {
-            eHealth -= 15;
+            eHealth -= playerAtkDamage;
         }
     }
 
-    private void destroyEnemy() {
+    private void DestroyEnemy() {
         if (eHealth <= 0) {
             Destroy(gameObject);
         }

@@ -11,7 +11,9 @@ public class Player : MonoBehaviour
     [SerializeField] private int playerSpeed = 2;
     [SerializeField] float delayShoot = .25f;
     [SerializeField] float destroyBulletTime = 5f;
-    [SerializeField] float bulletSpeed;
+    [SerializeField] float bulletSpeed = 8f;
+
+    [SerializeField] float delayEnemyAtk = 1f;
 
     private Transform weaponAim;
     private Rigidbody2D rb;
@@ -20,12 +22,12 @@ public class Player : MonoBehaviour
 
     private bool fX = false;
     private bool isFiring = false;
-    private bool isPlayerDead = false;
+    private bool isPlayerHit = false;
 
+    private int pExp = 0;
 
     public int pHealth;
-    public int pLevel = 1;
-    public int damage = 15;
+    public int pLevel;
 
     private void Awake() {
         // get the GameManager script component
@@ -37,14 +39,19 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         playerFlip = GetComponent<SpriteRenderer>();
         gun = weapon.GetComponent<SpriteRenderer>();
+
         weaponAim = weapon.transform;
+        
         gun.sprite = choosenGun;
+        
+        // Get info from GameManager
         pHealth = gm.getPlayerHealth();
+        pLevel = gm.getPlayerLevel();
     }
 
     private void Update() {
         RotateGun();
-        killPlayer();
+        KillPlayer();
     }
 
     private void FixedUpdate()
@@ -132,19 +139,29 @@ public class Player : MonoBehaviour
     }
 
     // collision function
-    private void OnCollisionEnter2D(Collision2D collision) {
+    private void OnCollisionStay2D(Collision2D collision) {
+        if(isPlayerHit) { return; }
+
+        isPlayerHit = true;
+
         // check for collision with enemy
         if(collision.gameObject.tag == "Enemy") {
             pHealth -= 10;
         }
         // update the player health in GameManger
         gm.setPlayerHealth(pHealth);
+
+        Invoke("ResetPlayerHit", delayEnemyAtk);
+    }
+
+    private void ResetPlayerHit() {
+        isPlayerHit = false;
     }
 
     // function to check if the player has 0 health
-    private void killPlayer() {
+    private void KillPlayer() {
         if(pHealth <= 0) {
-            isPlayerDead = true;
+            gm.setIsPlayerDead(true);
             Destroy(gameObject);
         }
     }
