@@ -10,6 +10,16 @@ public class GameManager : MonoBehaviour
 
     private Transform playerSpawn;
 
+    private DifficultyManager difficultyManager;
+
+    // Start of new game info - health and damage
+    private const int easyHealth = 150;
+    private const int mediumHealth = 100;
+    private const int hardHealth = 75;
+    private const int easyDamage = 50;
+    private const int mediumDamage = 25;
+    private const int hardDamage = 15;
+
     private int playerHealth = 100;
     private int playerLevel = 1;
     private int playerDamage = 100;
@@ -29,6 +39,20 @@ public class GameManager : MonoBehaviour
     }
 
     private void Init() {
+        // get the difficulty manager object and component
+        difficultyManager = GameObject.Find("DifficultyManager").GetComponent<DifficultyManager>();
+
+        if(difficultyManager.gEasy) {
+            setPlayerHealth(easyHealth);
+            setPlayerDamage(easyDamage);
+        } else if (difficultyManager.gMedium) {
+            setPlayerHealth(mediumHealth);
+            setPlayerDamage(mediumDamage);
+        } else if (difficultyManager.gHard) {
+            setPlayerHealth(hardHealth);
+            setPlayerDamage(hardDamage);
+        }
+        
         spawnPlayer();
     }
 
@@ -49,7 +73,7 @@ public class GameManager : MonoBehaviour
 
     public int getPlayerDamage() { return playerDamage; }
 
-    public void setPlayerDamager(int damage) { playerDamage = damage; }
+    public void setPlayerDamage(int damage) { playerDamage = damage; }
 
     public int getPlayerExperiencePoints() { return playerExperiencePoints; }
 

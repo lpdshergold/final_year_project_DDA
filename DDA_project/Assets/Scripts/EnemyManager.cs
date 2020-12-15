@@ -8,6 +8,15 @@ public class EnemyManager : MonoBehaviour
     public static EnemyManager enemyManagerInstance = null;
 
     private GameManager gm;
+    private DifficultyManager dm;
+
+    // Start of new game info - health and damage
+    private const int easyEnemyHealth = 50;
+    private const int mediumEnemyHealth = 75;
+    private const int hardEnemyHealth = 100;
+    private const int easyEnemyDamage = 10;
+    private const int mediumEnemyDamage = 15;
+    private const int hardEnemyDamage = 20;
 
     private int enemyHealth = 100;
     private int enemyDamage = 15;
@@ -33,10 +42,7 @@ public class EnemyManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         gm = GameObject.Find("GameManager").GetComponent<GameManager>();
-
-        // THIS WILL NEED TO BE ADDED TO UPDATE FUNCTION FOR WHEN THE DAMAGE IS INCREASED
-        // get player attack damager
-        playerAtkDamage = gm.getPlayerDamage();
+        dm = GameObject.Find("DifficultyManager").GetComponent<DifficultyManager>();
 
         Init();
     }
@@ -47,10 +53,27 @@ public class EnemyManager : MonoBehaviour
 
     private void Update() {
         SpawnEnemies();
+        playerAtkDamage = gm.getPlayerDamage();
     }
 
     private void Init() {
         GetEnemySpawnLocations();
+
+        if(dm.gEasy) {
+            setEnemyHealth(easyEnemyHealth);
+            setEnemyDamage(easyEnemyDamage);
+        } else if (dm.gMedium) {
+            setEnemyHealth(mediumEnemyHealth);
+            setEnemyDamage(mediumEnemyDamage);
+        } else if (dm.gHard) {
+            setEnemyHealth(hardEnemyHealth);
+            setEnemyDamage(hardEnemyDamage);
+        }
+
+        Debug.Log(enemyHealth);
+        Debug.Log(enemyDamage);
+
+        playerAtkDamage = gm.getPlayerDamage();
     }
 
     private void GetEnemySpawnLocations() {
