@@ -18,20 +18,21 @@ public class Player : MonoBehaviour
     private Transform weaponAim;
     private Rigidbody2D rb;
     private SpriteRenderer playerFlip, gun;
-    private GameManager gm;
+    private PlayerManager pm;
 
     private bool fX = false;
     private bool isFiring = false;
     private bool isPlayerHit = false;
 
-    private int pExp = 0;
-
     public int pHealth;
     public int pLevel;
 
+    private int pExp = 0;
+    private int pMaxExp = 0;
+
     private void Awake() {
         // get the GameManager script component
-        gm = GameObject.Find("GameManager").GetComponent<GameManager>();
+        pm = GameObject.Find("PlayerManager").GetComponent<PlayerManager>();
     }
 
     private void Start() {
@@ -44,8 +45,8 @@ public class Player : MonoBehaviour
         gun.sprite = choosenGun;
         
         // Get info from GameManager
-        pHealth = gm.getPlayerHealth();
-        pLevel = gm.getPlayerLevel();
+        pHealth = pm.getPlayerHealth();
+        pLevel = pm.getPlayerLevel();
     }
 
     private void Update() {
@@ -147,7 +148,7 @@ public class Player : MonoBehaviour
             pHealth -= 10;
         }
         // update the player health in GameManger
-        gm.setPlayerHealth(pHealth);
+        pm.setPlayerHealth(pHealth);
 
         Invoke("ResetPlayerHit", delayEnemyAtk);
     }
@@ -159,7 +160,7 @@ public class Player : MonoBehaviour
     // function to check if the player has 0 health
     private void KillPlayer() {
         if(pHealth <= 0) {
-            gm.setIsPlayerDead(true);
+            pm.setIsPlayerDead(true);
             Destroy(gameObject);
         }
     }

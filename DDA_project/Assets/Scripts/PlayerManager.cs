@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class PlayerManager : MonoBehaviour
 {
-    public static GameManager gameManagerInstance = null;
+    public static PlayerManager playerManagerInstance = null;
 
     [SerializeField] private GameObject player;
 
@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     private const int mediumDamage = 25;
     private const int hardDamage = 15;
 
+    private int startPlayerHealth;
     private int playerHealth = 100;
     private int playerLevel = 1;
     private int playerDamage = 100;
@@ -27,15 +28,19 @@ public class GameManager : MonoBehaviour
     private bool isPlayerDead = false;
 
     private void Awake() {
-        if(gameManagerInstance == null) {
-            gameManagerInstance = this;
-        } else if (gameManagerInstance != this){
+        if(playerManagerInstance == null) {
+            playerManagerInstance = this;
+        } else if(playerManagerInstance != this) {
             Destroy(gameObject);
         }
 
         DontDestroyOnLoad(gameObject);
 
         Init();
+    }
+
+    private void Update() {
+        PlayerRespawn();
     }
 
     private void Init() {
@@ -45,12 +50,19 @@ public class GameManager : MonoBehaviour
         if(difficultyManager.gEasy) {
             setPlayerHealth(easyHealth);
             setPlayerDamage(easyDamage);
-        } else if (difficultyManager.gMedium) {
+
+            startPlayerHealth = easyHealth;
+        } else if(difficultyManager.gMedium) {
             setPlayerHealth(mediumHealth);
             setPlayerDamage(mediumDamage);
-        } else if (difficultyManager.gHard) {
+
+            startPlayerHealth = mediumHealth;
+        } else if(difficultyManager.gHard) {
             setPlayerHealth(hardHealth);
             setPlayerDamage(hardDamage);
+
+            startPlayerHealth = hardHealth;
+
         }
 
         Debug.Log("P health: " + playerHealth);
@@ -63,6 +75,14 @@ public class GameManager : MonoBehaviour
     private void spawnPlayer() {
         playerSpawn = GameObject.FindGameObjectWithTag("PlayerSpawn").transform;
         _ = Instantiate(player, playerSpawn.position, playerSpawn.rotation);
+    }
+
+    private void PlayerRespawn() {
+        if(isPlayerDead) {
+            _ = Instantiate(player, playerSpawn.position, playerSpawn.rotation);
+            isPlayerDead = false;
+            setPlayerHealth(startPlayerHealth);
+        }
     }
 
     // getter and setter functions ====================================================

@@ -1,13 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using UnityEditor.UIElements;
 using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
     public static EnemyManager enemyManagerInstance = null;
 
-    private GameManager gm;
+    private PlayerManager pm;
     private DifficultyManager dm;
 
     // Start of new game info - health and damage
@@ -26,7 +27,8 @@ public class EnemyManager : MonoBehaviour
     public int enemyAmount = 0;
     private int maxEnemyAmount = 10;
 
-    private float enemySpawnDelay = 1f; 
+    private float spawnTime = 0.0f;
+    private float enemySpawnDelay = 3f; 
 
     private GameObject[] enemySpawns;
 
@@ -41,7 +43,7 @@ public class EnemyManager : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
 
-        gm = GameObject.Find("GameManager").GetComponent<GameManager>();
+        pm = GameObject.Find("PlayerManager").GetComponent<PlayerManager>();
         dm = GameObject.Find("DifficultyManager").GetComponent<DifficultyManager>();
 
         Init();
@@ -52,8 +54,10 @@ public class EnemyManager : MonoBehaviour
     }
 
     private void Update() {
+        Debug.Log(enemyAmount);
+        spawnTime += Time.deltaTime;
         SpawnEnemies();
-        playerAtkDamage = gm.getPlayerDamage();
+        playerAtkDamage = pm.getPlayerDamage();
     }
 
     private void Init() {
@@ -70,10 +74,10 @@ public class EnemyManager : MonoBehaviour
             setEnemyDamage(hardEnemyDamage);
         }
 
-        Debug.Log(enemyHealth);
-        Debug.Log(enemyDamage);
+        Debug.Log("E health: " + enemyHealth);
+        Debug.Log("E damage: " + enemyDamage);
 
-        playerAtkDamage = gm.getPlayerDamage();
+        playerAtkDamage = pm.getPlayerDamage();
     }
 
     private void GetEnemySpawnLocations() {
@@ -85,13 +89,16 @@ public class EnemyManager : MonoBehaviour
         // if max enemies are in the game, exit out
         if (enemyAmount >= maxEnemyAmount) { return; }
 
-        while (enemyAmount < maxEnemyAmount) {
-            enemyAmount++;
+        if(spawnTime >= enemySpawnDelay) {
+            spawnTime = 0.0f;
+            while(enemyAmount < maxEnemyAmount) {
+                enemyAmount++;
 
-            // get a random enemy spawn with random.range
-            GameObject spawn = enemySpawns[Random.Range(0, 4)];
-            // create a new enemy gameobject
-            _ = Instantiate(enemyPrefab, spawn.transform.position, spawn.transform.rotation);
+                // get a random enemy spawn with random.range
+                GameObject spawn = enemySpawns[Random.Range(0, 4)];
+                // create a new enemy gameobject
+                _ = Instantiate(enemyPrefab, spawn.transform.position, spawn.transform.rotation);
+            }
         }
     }
 

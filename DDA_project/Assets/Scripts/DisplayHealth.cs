@@ -5,18 +5,22 @@ using UnityEngine;
 
 public class DisplayHealth : MonoBehaviour
 {
-    private GameManager gm;
+    private PlayerManager pm;
 
     private int health;
     private Text healthText;
 
     private void Start() {
-        gm = GameObject.Find("GameManager").GetComponent<GameManager>();
+        pm = GameObject.Find("PlayerManager").GetComponent<PlayerManager>();
         healthText = GetComponent<Text>();
     }
 
     private void Update() {
-        health = gm.getPlayerHealth();
+        UpdateHealthDisplay();
+    }
+
+    private void UpdateHealthDisplay() {
+        health = pm.getPlayerHealth();
         healthText.text = "Health: " + health;
     }
 }

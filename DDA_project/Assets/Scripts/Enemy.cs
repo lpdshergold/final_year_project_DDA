@@ -34,6 +34,7 @@ public class Enemy : MonoBehaviour
 
     // Update is called once per frame
     void Update() {
+        Debug.Log(playerDirection);
         DestroyEnemy();
     }
 
@@ -42,8 +43,12 @@ public class Enemy : MonoBehaviour
     }
 
     private void MoveEnemy() {
-        playerDirection = player.transform.position - transform.position;
-        rb.MovePosition((Vector2)transform.position + (playerDirection * moveSpeed * Time.deltaTime));
+        if (player) {
+            playerDirection = player.transform.position - transform.position;
+            rb.MovePosition((Vector2)transform.position + (playerDirection * moveSpeed * Time.deltaTime));
+        } else {
+            player = GameObject.FindGameObjectWithTag("Player");
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision) {

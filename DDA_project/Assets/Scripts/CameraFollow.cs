@@ -10,6 +10,12 @@ public class CameraFollow : MonoBehaviour
     }
 
     private void Update() {
-        transform.position = new Vector3(player.transform.position.x, player.transform.position.y, -10);
+        if (player) {
+            Debug.Log("here");
+            transform.position = new Vector3(player.transform.position.x, player.transform.position.y, -10);
+        } else {
+            Debug.Log("here now");
+            player = GameObject.FindGameObjectWithTag("Player");
+        }
     }
 }

@@ -9,7 +9,7 @@ public class DifficultyManager : MonoBehaviour
     // Use an Enum or something similar when putting this in the menu
     public bool gEasy = false;
     public bool gMedium = false;
-    public bool gHard = true;
+    public bool gHard = false;
 
     private void Awake() {
         if(difficultyManagerInstance == null) {
