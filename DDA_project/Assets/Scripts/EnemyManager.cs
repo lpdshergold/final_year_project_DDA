@@ -11,14 +11,6 @@ public class EnemyManager : MonoBehaviour
     private PlayerManager pm;
     private DifficultyManager dm;
 
-    // Start of new game info - health and damage
-    private const int easyEnemyHealth = 50;
-    private const int mediumEnemyHealth = 75;
-    private const int hardEnemyHealth = 100;
-    private const int easyEnemyDamage = 10;
-    private const int mediumEnemyDamage = 15;
-    private const int hardEnemyDamage = 20;
-
     private int enemyHealth = 100;
     private int enemyDamage = 15;
     private float enemyMoveSpeed = 1;
@@ -54,25 +46,19 @@ public class EnemyManager : MonoBehaviour
     }
 
     private void Update() {
-        Debug.Log(enemyAmount);
         spawnTime += Time.deltaTime;
+
         SpawnEnemies();
+
         playerAtkDamage = pm.getPlayerDamage();
     }
 
     private void Init() {
         GetEnemySpawnLocations();
 
-        if(dm.gEasy) {
-            setEnemyHealth(easyEnemyHealth);
-            setEnemyDamage(easyEnemyDamage);
-        } else if (dm.gMedium) {
-            setEnemyHealth(mediumEnemyHealth);
-            setEnemyDamage(mediumEnemyDamage);
-        } else if (dm.gHard) {
-            setEnemyHealth(hardEnemyHealth);
-            setEnemyDamage(hardEnemyDamage);
-        }
+        enemyHealth = dm.getEnemyHealth();
+        enemyDamage = dm.getEnemyDamage();
+
 
         Debug.Log("E health: " + enemyHealth);
         Debug.Log("E damage: " + enemyDamage);
