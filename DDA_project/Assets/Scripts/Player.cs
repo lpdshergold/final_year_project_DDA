@@ -1,4 +1,4 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Data;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -9,15 +9,16 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform bulletSpawn;
 
     [SerializeField] private int playerSpeed = 2;
-    [SerializeField] float delayShoot = .25f;
-    [SerializeField] float destroyBulletTime = 5f;
-    [SerializeField] float bulletSpeed = 8f;
+    [SerializeField] private float delayShoot = .25f;
+    [SerializeField] private float destroyBulletTime = 5f;
+    [SerializeField] private float bulletSpeed = 8f;
 
-    [SerializeField] float delayEnemyAtk = 1f;
+    [SerializeField] private float delayEnemyAtk = 1f;
 
     private Transform weaponAim;
     private Rigidbody2D rb;
     private SpriteRenderer playerFlip, gun;
+
     private PlayerManager pm;
 
     private bool fX = false;
@@ -25,9 +26,6 @@ public class Player : MonoBehaviour
     private bool isPlayerHit = false;
 
     public int pHealth;
-
-    private int pExp = 0;
-    private int pMaxExp = 0;
 
     private void Awake() {
         // get the GameManager script component

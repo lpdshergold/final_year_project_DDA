@@ -4,15 +4,27 @@ using UnityEngine;
 
 public class Rulebook : MonoBehaviour
 {
-    // Start is called before the first frame update
+    private DifficultyManager dm;
+    private PlayerManager pm;
+    private Multiplier multiplier;
+    private WeightSystem weightSystem;
+
+    private bool isDDAEnabled = false;
+    private bool doOnce = false;
+
     void Start()
     {
-        
+        multiplier = gameObject.GetComponent<Multiplier>();
+        weightSystem = gameObject.GetComponent<WeightSystem>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        if(GameObject.Find("PlayerManager") && !doOnce) {
+            pm = GameObject.Find("PlayerManager").GetComponent<PlayerManager>();
+            doOnce = true;
+        }
     }
+
+    public void setDDA(bool enable) { isDDAEnabled = enable; }
 }

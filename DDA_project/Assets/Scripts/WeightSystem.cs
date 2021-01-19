@@ -4,15 +4,22 @@ using UnityEngine;
 
 public class WeightSystem : MonoBehaviour
 {
-    // Start is called before the first frame update
+    private PlayerManager pm;
+    private Rulebook rulebook;
+
+    private bool doOnce = false;
+
     void Start()
     {
-        
+        rulebook = GameObject.Find("DifficultyManager").GetComponent<Rulebook>();
     }
 
-    // Update is called once per frame
     void Update()
     {
+        if (GameObject.Find("PlayerManager") && !doOnce) {
+            pm = GameObject.Find("PlayerManager").GetComponent<PlayerManager>();
+            doOnce = true;
+        }
         
     }
 }

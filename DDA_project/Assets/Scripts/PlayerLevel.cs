@@ -5,7 +5,9 @@ using UnityEngine;
 
 public class PlayerLevel : MonoBehaviour
 {
+    private GameObject playerManager;
     private PlayerManager pm;
+    private Rulebook rulebook;
 
     private int playerlvl = 0;
     private int playerExp = 0;
@@ -13,7 +15,9 @@ public class PlayerLevel : MonoBehaviour
 
     void Start()
     {
-        pm = GameObject.Find("PlayerManager").GetComponent<PlayerManager>();
+        playerManager = GameObject.Find("PlayerManager");
+        pm = playerManager.GetComponent<PlayerManager>();
+        rulebook = playerManager.GetComponent<Rulebook>();
 
         playerlvl = pm.getPlayerLevel();
         playerExp = pm.getPlayerExperiencePoints();

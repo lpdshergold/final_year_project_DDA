@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class Multiplier : MonoBehaviour
 {
-    // Start is called before the first frame update
+    private DifficultyManager dm;
+
     void Start()
     {
-        
+        dm = gameObject.GetComponent<DifficultyManager>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         

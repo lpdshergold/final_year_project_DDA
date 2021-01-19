@@ -6,6 +6,8 @@ public class DifficultyManager : MonoBehaviour
 {
     public static DifficultyManager difficultyManagerInstance = null;
 
+    private Rulebook rulebook;
+
     private int playerHealth, playerDamage, enemyHealth, enemyDamage;
     private float enemyMoveSpeed;
 
@@ -19,7 +21,13 @@ public class DifficultyManager : MonoBehaviour
             Destroy(gameObject);
         }
 
+        rulebook = gameObject.GetComponent<Rulebook>();
+
         DontDestroyOnLoad(gameObject);
+    }
+
+    public void updateDDAElsewhere(bool enabled) {
+        rulebook.setDDA(enabled);
     }
 
     // Getter and Setters

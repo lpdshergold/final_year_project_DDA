@@ -1,12 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using UnityEditor.UIElements;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
     private GameObject player;
+
     private PlayerLevel pl;
+    private Rulebook rulebook;
+    private WeightSystem weightSystem;
+
     private Rigidbody2D rb;
     private Vector2 playerDirection;
 
@@ -22,11 +27,14 @@ public class Enemy : MonoBehaviour
     private void Awake() {
         // get the GameManager script component
         em = GameObject.Find("EnemyManager").GetComponent<EnemyManager>();
+        player = GameObject.FindGameObjectWithTag("Player");
+
+        pl = GameObject.Find("PlayerManager").GetComponent<PlayerLevel>();
+        rulebook = GameObject.Find("DifficultyManager").GetComponent<Rulebook>();
+        weightSystem = GameObject.Find("DifficultyManager").GetComponent<WeightSystem>();
     }
 
     void Start() {
-        player = GameObject.FindGameObjectWithTag("Player");
-        pl = GameObject.Find("PlayerManager").GetComponent<PlayerLevel>();
         rb = gameObject.GetComponent<Rigidbody2D>();
 
         moveSpeed = em.getEnemyMoveSpeed();

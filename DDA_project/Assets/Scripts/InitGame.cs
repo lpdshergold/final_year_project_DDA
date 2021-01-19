@@ -48,6 +48,7 @@ public class InitGame : MonoBehaviour
             dm.setEnemyHealth(easyEnemyHealth);
             dm.setEnemyDamage(easyEnemyDamage);
             dm.setDDAEnabled(isDDAEnabled);
+            dm.updateDDAElsewhere(isDDAEnabled);
             dm.setGameDifficulty("easy");
             sendOnce = true;
         } else if(gMedium && !sendOnce) {
@@ -56,6 +57,7 @@ public class InitGame : MonoBehaviour
             dm.setEnemyHealth(mediumEnemyHealth);
             dm.setEnemyDamage(mediumEnemyDamage);
             dm.setDDAEnabled(isDDAEnabled);
+            dm.updateDDAElsewhere(isDDAEnabled);
             dm.setGameDifficulty("medium");
             sendOnce = true;
         } else if(gHard && !sendOnce) {
@@ -64,6 +66,7 @@ public class InitGame : MonoBehaviour
             dm.setEnemyHealth(hardEnemyHealth);
             dm.setEnemyDamage(hardEnemyDamage);
             dm.setDDAEnabled(isDDAEnabled);
+            dm.updateDDAElsewhere(isDDAEnabled);
             dm.setGameDifficulty("hard");
             sendOnce = true;
         }
@@ -82,6 +85,5 @@ public class InitGame : MonoBehaviour
 
     public void setDDA(bool checkDDA) {
         isDDAEnabled = checkDDA;
-        Debug.Log("DDA: " + isDDAEnabled);
     }
 }

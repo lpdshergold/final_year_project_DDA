@@ -18,10 +18,12 @@ public class MainMenu : MonoBehaviour
     public TextMeshProUGUI dda;
 
     public void StartGame() {
-        initGame.setDDA(isDDAEnabled);
-        initGame.setGameDifficulty(easyDiff, mediumDiff, hardDiff);
+        if(easyDiff || mediumDiff || hardDiff) {
+            initGame.setDDA(isDDAEnabled);
+            initGame.setGameDifficulty(easyDiff, mediumDiff, hardDiff);
 
-        SceneManager.LoadScene("ScenarioOne");
+            SceneManager.LoadScene("ScenarioOne");
+        }
     }
 
     public void QuitGame() {
