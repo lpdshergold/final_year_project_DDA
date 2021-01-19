@@ -9,12 +9,8 @@ public class DifficultyManager : MonoBehaviour
     private int playerHealth, playerDamage, enemyHealth, enemyDamage;
     private float enemyMoveSpeed;
 
-    // Use an Enum or something similar when putting this in the menu
-/*    public bool gEasy = false;
-    public bool gMedium = false;
-    public bool gHard = false;*/
-
-    private bool isDDAEnabled = false; 
+    private bool isDDAEnabled = false;
+    private string gameDifficulty = "";
 
     private void Awake() {
         if(difficultyManagerInstance == null) {
@@ -24,10 +20,6 @@ public class DifficultyManager : MonoBehaviour
         }
 
         DontDestroyOnLoad(gameObject);
-    }
-
-    private void Start() {
-
     }
 
     // Getter and Setters
@@ -54,4 +46,8 @@ public class DifficultyManager : MonoBehaviour
     public bool getDDAEnabled() { return isDDAEnabled; }
 
     public void setDDAEnabled(bool enable) { isDDAEnabled = enable; }
+
+    public string getGameDifficulty() { return gameDifficulty; }
+
+    public void setGameDifficulty(string difficulty) { gameDifficulty = difficulty; }
 }

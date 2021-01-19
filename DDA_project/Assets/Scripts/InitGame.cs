@@ -48,6 +48,7 @@ public class InitGame : MonoBehaviour
             dm.setEnemyHealth(easyEnemyHealth);
             dm.setEnemyDamage(easyEnemyDamage);
             dm.setDDAEnabled(isDDAEnabled);
+            dm.setGameDifficulty("easy");
             sendOnce = true;
         } else if(gMedium && !sendOnce) {
             dm.setPlayerHealth(mediumHealth);
@@ -55,6 +56,7 @@ public class InitGame : MonoBehaviour
             dm.setEnemyHealth(mediumEnemyHealth);
             dm.setEnemyDamage(mediumEnemyDamage);
             dm.setDDAEnabled(isDDAEnabled);
+            dm.setGameDifficulty("medium");
             sendOnce = true;
         } else if(gHard && !sendOnce) {
             dm.setPlayerHealth(hardHealth);
@@ -62,6 +64,7 @@ public class InitGame : MonoBehaviour
             dm.setEnemyHealth(hardEnemyHealth);
             dm.setEnemyDamage(hardEnemyDamage);
             dm.setDDAEnabled(isDDAEnabled);
+            dm.setGameDifficulty("hard");
             sendOnce = true;
         }
     }

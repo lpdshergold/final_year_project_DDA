@@ -80,7 +80,6 @@ public class PlayerManager : MonoBehaviour
 
     public void setPlayerExperiencePoints(int exp) { playerExperiencePoints = exp; }
 
-    // this getter may not be needed
     public bool getIsPlayerDead() { return isPlayerDead; }
 
     public void setIsPlayerDead(bool dead) { isPlayerDead = dead; }

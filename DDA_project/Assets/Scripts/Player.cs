@@ -25,7 +25,6 @@ public class Player : MonoBehaviour
     private bool isPlayerHit = false;
 
     public int pHealth;
-    public int pLevel;
 
     private int pExp = 0;
     private int pMaxExp = 0;
@@ -46,7 +45,6 @@ public class Player : MonoBehaviour
         
         // Get info from GameManager
         pHealth = pm.getPlayerHealth();
-        pLevel = pm.getPlayerLevel();
     }
 
     private void Update() {
