@@ -19,6 +19,9 @@ public class PlayerManager : MonoBehaviour
     private int playerDamage = 100;
     private int playerExperiencePoints = 0;
     private bool isPlayerDead = false;
+    public int enemyDamage;
+
+    [HideInInspector] public bool updateDetails = false;
 
     private void Awake() {
         if(playerManagerInstance == null) {
@@ -36,11 +39,17 @@ public class PlayerManager : MonoBehaviour
 
     private void Update() {
         PlayerRespawn();
+        
+        if (updateDetails) {
+            updateDetails = false;
+            updatePlayerDetails();
+        }
     }
 
     private void Init() {
         playerHealth = dm.getPlayerHealth();
         playerDamage = dm.getPlayerDamage();
+        enemyDamage = dm.getEnemyDamage();
 
         startPlayerHealth = playerHealth;
 
@@ -48,6 +57,11 @@ public class PlayerManager : MonoBehaviour
         Debug.Log("P damage: " + playerDamage);
 
         spawnPlayer();
+    }
+
+    private void updatePlayerDetails() {
+        playerHealth = dm.getPlayerHealth();
+        playerDamage = dm.getPlayerDamage();
     }
 
     // find playerSpawn location and create player

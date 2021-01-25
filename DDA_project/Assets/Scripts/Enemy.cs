@@ -9,8 +9,6 @@ public class Enemy : MonoBehaviour
     private GameObject player;
 
     private PlayerLevel pl;
-    private Rulebook rulebook;
-    private WeightSystem weightSystem;
 
     private Rigidbody2D rb;
     private Vector2 playerDirection;
@@ -28,15 +26,15 @@ public class Enemy : MonoBehaviour
         // get the GameManager script component
         em = GameObject.Find("EnemyManager").GetComponent<EnemyManager>();
         player = GameObject.FindGameObjectWithTag("Player");
-
         pl = GameObject.Find("PlayerManager").GetComponent<PlayerLevel>();
-        rulebook = GameObject.Find("DifficultyManager").GetComponent<Rulebook>();
-        weightSystem = GameObject.Find("DifficultyManager").GetComponent<WeightSystem>();
     }
 
     void Start() {
         rb = gameObject.GetComponent<Rigidbody2D>();
+        Init();
+    }
 
+    private void Init() {
         moveSpeed = em.getEnemyMoveSpeed();
         eHealth = em.getEnemyHealth();
         damage = em.getEnemyDamage();

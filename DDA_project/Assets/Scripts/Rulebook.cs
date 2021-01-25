@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Rulebook : MonoBehaviour
 {
-    private DifficultyManager dm;
     private PlayerManager pm;
     private Multiplier multiplier;
     private WeightSystem weightSystem;
 
     private bool isDDAEnabled = false;
+    private bool levelup = false;
     private bool doOnce = false;
 
     void Start()
@@ -24,7 +24,18 @@ public class Rulebook : MonoBehaviour
             pm = GameObject.Find("PlayerManager").GetComponent<PlayerManager>();
             doOnce = true;
         }
+
+        if(levelup) {
+            levelup = false;
+            if (isDDAEnabled) {
+                multiplier.ddaLevelup();
+            } else {
+                multiplier.basicLevelUp();
+            } 
+        }
     }
 
     public void setDDA(bool enable) { isDDAEnabled = enable; }
+
+    public void setLevelup(bool plevel) { levelup = plevel; }
 }

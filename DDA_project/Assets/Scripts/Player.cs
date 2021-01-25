@@ -25,6 +25,8 @@ public class Player : MonoBehaviour
     private bool isFiring = false;
     private bool isPlayerHit = false;
 
+    private int enemyDamage;
+
     public int pHealth;
 
     private void Awake() {
@@ -43,11 +45,13 @@ public class Player : MonoBehaviour
         
         // Get info from GameManager
         pHealth = pm.getPlayerHealth();
+        enemyDamage = pm.enemyDamage;
     }
 
     private void Update() {
         RotateGun();
         KillPlayer();
+        updateDetails();
     }
 
     private void FixedUpdate() {
@@ -133,6 +137,12 @@ public class Player : MonoBehaviour
         isFiring = false;
     }
 
+    private void updateDetails() {
+        if (pHealth != pm.getPlayerHealth()) {
+            pHealth = pm.getPlayerHealth();
+        }
+    }
+
     // collision function
     private void OnCollisionStay2D(Collision2D collision) {
         if(isPlayerHit) { return; }
@@ -141,7 +151,7 @@ public class Player : MonoBehaviour
 
         // check for collision with enemy
         if(collision.gameObject.tag == "Enemy") {
-            pHealth -= 10;
+            pHealth -= enemyDamage;
         }
         // update the player health in GameManger
         pm.setPlayerHealth(pHealth);

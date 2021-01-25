@@ -12,19 +12,19 @@ public class InitGame : MonoBehaviour
 
     // player information
     private const int easyHealth = 150;
-    private const int mediumHealth = 100;
-    private const int hardHealth = 75;
+    private const int mediumHealth = 125;
+    private const int hardHealth = 100;
     private const int easyDamage = 50;
-    private const int mediumDamage = 25;
-    private const int hardDamage = 15;
+    private const int mediumDamage = 30;
+    private const int hardDamage = 25;
 
     // enemy information 
-    private const int easyEnemyHealth = 50;
-    private const int mediumEnemyHealth = 75;
+    private const int easyEnemyHealth = 100;
+    private const int mediumEnemyHealth = 100;
     private const int hardEnemyHealth = 100;
-    private const int easyEnemyDamage = 10;
-    private const int mediumEnemyDamage = 15;
-    private const int hardEnemyDamage = 20;
+    private const int easyEnemyDamage = 15;
+    private const int mediumEnemyDamage = 20;
+    private const int hardEnemyDamage = 25;
 
     private bool isDDAEnabled = false;
     private bool sendOnce = false;

@@ -26,6 +26,8 @@ public class EnemyManager : MonoBehaviour
 
     [HideInInspector] public int playerAtkDamage;
 
+    [HideInInspector] public bool updateDetails = false;
+
     private void Awake() {
         if(enemyManagerInstance == null) {
             enemyManagerInstance = this;
@@ -51,6 +53,11 @@ public class EnemyManager : MonoBehaviour
         SpawnEnemies();
 
         playerAtkDamage = pm.getPlayerDamage();
+
+        if(updateDetails) {
+            updateDetails = false;
+            updatePlayerDetails();
+        }
     }
 
     private void Init() {
@@ -58,10 +65,6 @@ public class EnemyManager : MonoBehaviour
 
         enemyHealth = dm.getEnemyHealth();
         enemyDamage = dm.getEnemyDamage();
-
-
-        Debug.Log("E health: " + enemyHealth);
-        Debug.Log("E damage: " + enemyDamage);
 
         playerAtkDamage = pm.getPlayerDamage();
     }
@@ -86,6 +89,11 @@ public class EnemyManager : MonoBehaviour
                 _ = Instantiate(enemyPrefab, spawn.transform.position, spawn.transform.rotation);
             }
         }
+    }
+
+    private void updatePlayerDetails() {
+        enemyHealth = dm.getEnemyHealth();
+        enemyDamage = dm.getEnemyDamage();
     }
 
     // getter and setter functions ====================================================

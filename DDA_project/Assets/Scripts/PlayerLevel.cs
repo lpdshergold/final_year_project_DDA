@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class PlayerLevel : MonoBehaviour
 {
-    private GameObject playerManager;
     private PlayerManager pm;
     private Rulebook rulebook;
 
@@ -15,9 +14,8 @@ public class PlayerLevel : MonoBehaviour
 
     void Start()
     {
-        playerManager = GameObject.Find("PlayerManager");
-        pm = playerManager.GetComponent<PlayerManager>();
-        rulebook = playerManager.GetComponent<Rulebook>();
+        pm = GameObject.Find("PlayerManager").GetComponent<PlayerManager>();
+        rulebook = GameObject.Find("DifficultyManager").GetComponent<Rulebook>();
 
         playerlvl = pm.getPlayerLevel();
         playerExp = pm.getPlayerExperiencePoints();
@@ -35,6 +33,7 @@ public class PlayerLevel : MonoBehaviour
             updateXp();
 
             pm.setPlayerLevel(playerlvl);
+            rulebook.setLevelup(true);
         }
     }
 
