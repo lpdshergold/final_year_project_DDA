@@ -51,7 +51,6 @@ public class Player : MonoBehaviour
     private void Update() {
         RotateGun();
         KillPlayer();
-        updateDetails();
     }
 
     private void FixedUpdate() {
@@ -137,10 +136,9 @@ public class Player : MonoBehaviour
         isFiring = false;
     }
 
-    private void updateDetails() {
-        if (pHealth != pm.getPlayerHealth()) {
-            pHealth = pm.getPlayerHealth();
-        }
+    public void updateDetails() {
+        pHealth = pm.getPlayerHealth();
+        enemyDamage = pm.enemyDamage;
     }
 
     // collision function

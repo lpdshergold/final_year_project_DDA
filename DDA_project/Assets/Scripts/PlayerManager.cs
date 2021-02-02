@@ -12,9 +12,11 @@ public class PlayerManager : MonoBehaviour
     private Transform playerSpawn;
 
     private DifficultyManager dm;
+    private Rulebook rulebook;
 
     private int startPlayerHealth;
     private int playerHealth = 100;
+    private int playerMaxHealth;
     private int playerLevel = 1;
     private int playerDamage = 100;
     private int playerExperiencePoints = 0;
@@ -33,6 +35,7 @@ public class PlayerManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         dm = GameObject.Find("DifficultyManager").GetComponent<DifficultyManager>();
+        rulebook = GameObject.Find("DifficultyManager").GetComponent<Rulebook>();
 
         Init();
     }
@@ -48,6 +51,7 @@ public class PlayerManager : MonoBehaviour
 
     private void Init() {
         playerHealth = dm.getPlayerHealth();
+        playerMaxHealth = playerHealth;
         playerDamage = dm.getPlayerDamage();
         enemyDamage = dm.getEnemyDamage();
 
@@ -61,7 +65,12 @@ public class PlayerManager : MonoBehaviour
 
     private void updatePlayerDetails() {
         playerHealth = dm.getPlayerHealth();
+        playerMaxHealth = dm.getPlayerHealth();
         playerDamage = dm.getPlayerDamage();
+        enemyDamage = dm.getEnemyDamage();
+
+        Player p = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        p.updateDetails();
     }
 
     // find playerSpawn location and create player
@@ -73,6 +82,7 @@ public class PlayerManager : MonoBehaviour
     private void PlayerRespawn() {
         if(isPlayerDead) {
             _ = Instantiate(player, playerSpawn.position, playerSpawn.rotation);
+            rulebook.updatePlayerDeaths();
             isPlayerDead = false;
             setPlayerHealth(startPlayerHealth);
         }
@@ -82,6 +92,10 @@ public class PlayerManager : MonoBehaviour
     public int getPlayerHealth() { return playerHealth; }
 
     public void setPlayerHealth(int health) { playerHealth = health; }
+
+    public int getPlayerMaxHealth() { return playerMaxHealth; }
+
+    public void setPlayerMaxHealth(int health) { playerMaxHealth = health; }
 
     public int getPlayerLevel() { return playerLevel; }
 

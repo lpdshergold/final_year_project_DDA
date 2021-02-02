@@ -18,7 +18,6 @@ public class Enemy : MonoBehaviour
 
     private float moveSpeed;
     private int eHealth;
-    private int damage;
     private int minExpToGive = 10;
     private int maxExpToGive = 20;
 
@@ -37,7 +36,6 @@ public class Enemy : MonoBehaviour
     private void Init() {
         moveSpeed = em.getEnemyMoveSpeed();
         eHealth = em.getEnemyHealth();
-        damage = em.getEnemyDamage();
 
         playerAtkDamage = em.playerAtkDamage;
     }
@@ -76,6 +74,7 @@ public class Enemy : MonoBehaviour
         if (eHealth <= 0) {
             em.enemyAmount--;
             EnemyExperience();
+            em.updateRuleBookEnemiesKilled();
             Destroy(gameObject);
         }
     }

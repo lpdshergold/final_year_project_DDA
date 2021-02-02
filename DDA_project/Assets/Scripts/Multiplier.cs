@@ -9,6 +9,11 @@ public class Multiplier : MonoBehaviour
     private EnemyManager em;
 
     private double basicMultiplier = 1.05;
+
+    private double smallWeightMultiplier = 1.03;
+    private double mediumWeightMultiplier = 1.05;
+    private double highWeightMultiplier = 1.07;
+
     private bool doOnce = false;
 
     void Start()
@@ -31,8 +36,19 @@ public class Multiplier : MonoBehaviour
         basicMultiplierCal();
     }
 
-    public void ddaLevelup() {
-        Debug.Log("Getting to DDA multiplier");
+    public void ddaLevelup(string pWeight) {
+        if (pWeight == "small") {
+            smallPlayerMultiplierCal();
+            smallEnemyMultiplierCal();
+        } else if (pWeight == "medium") {
+            mediumPlayerMultiplierCal();
+            mediumEnemyMultiplierCal();
+        } else if (pWeight == "high") {
+            highPlayerMultiplierCal();
+            highEnemyMultiplierCal();
+        } else {
+            Debug.Log("Error with weight lvl: Multiplier script"); 
+        }
     }
 
     private void basicMultiplierCal() {
@@ -54,6 +70,90 @@ public class Multiplier : MonoBehaviour
         dm.setEnemyDamage(tempEDamage);
 
         pm.updateDetails = true;
+        em.updateDetails = true;
+    }
+
+    private void smallPlayerMultiplierCal() {
+        Debug.Log("Small player multiplier");
+        int pHealth = dm.getPlayerHealth();
+        int pDamage = dm.getPlayerDamage();
+
+        int tempHealth = (int)(pHealth * smallWeightMultiplier);
+        dm.setPlayerHealth(tempHealth);
+
+        int tempDamage = (int)(pDamage * smallWeightMultiplier);
+        dm.setPlayerDamage(tempDamage);
+
+        pm.updateDetails = true;
+    }
+
+    private void mediumPlayerMultiplierCal() {
+        Debug.Log("Medium player multiplier");
+        int pHealth = dm.getPlayerHealth();
+        int pDamage = dm.getPlayerDamage();
+
+        int tempHealth = (int)(pHealth * mediumWeightMultiplier);
+        dm.setPlayerHealth(tempHealth);
+
+        int tempDamage = (int)(pDamage * mediumWeightMultiplier);
+        dm.setPlayerDamage(tempDamage);
+
+        pm.updateDetails = true;
+    }
+
+    private void highPlayerMultiplierCal() {
+        Debug.Log("High player multiplier");
+        int pHealth = dm.getPlayerHealth();
+        int pDamage = dm.getPlayerDamage();
+
+        int tempHealth = (int)(pHealth * highWeightMultiplier);
+        dm.setPlayerHealth(tempHealth);
+
+        int tempDamage = (int)(pDamage * highWeightMultiplier);
+        dm.setPlayerDamage(tempDamage);
+
+        pm.updateDetails = true;
+    }
+
+    private void smallEnemyMultiplierCal() {
+        Debug.Log("Small enemy multiplier");
+        int eHealth = dm.getEnemyHealth();
+        int eDamage = dm.getEnemyDamage();
+
+        int tempEHealth = (int)(eHealth * smallWeightMultiplier);
+        dm.setEnemyHealth(tempEHealth);
+
+        int tempEDamage = (int)(eDamage * smallWeightMultiplier);
+        dm.setEnemyDamage(tempEDamage);
+
+        em.updateDetails = true;
+    }
+
+    private void mediumEnemyMultiplierCal() {
+        Debug.Log("Medium enemy multiplier");
+        int eHealth = dm.getEnemyHealth();
+        int eDamage = dm.getEnemyDamage();
+
+        int tempEHealth = (int)(eHealth * mediumWeightMultiplier);
+        dm.setEnemyHealth(tempEHealth);
+
+        int tempEDamage = (int)(eDamage * mediumWeightMultiplier);
+        dm.setEnemyDamage(tempEDamage);
+
+        em.updateDetails = true;
+    }
+
+    private void highEnemyMultiplierCal() {
+        Debug.Log("High enemy multiplier");
+        int eHealth = dm.getEnemyHealth();
+        int eDamage = dm.getEnemyDamage();
+
+        int tempEHealth = (int)(eHealth * highWeightMultiplier);
+        dm.setEnemyHealth(tempEHealth);
+
+        int tempEDamage = (int)(eDamage * highWeightMultiplier);
+        dm.setEnemyDamage(tempEDamage);
+
         em.updateDetails = true;
     }
 }

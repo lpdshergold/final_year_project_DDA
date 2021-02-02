@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq.Expressions;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -10,6 +11,7 @@ public class EnemyManager : MonoBehaviour
 
     private PlayerManager pm;
     private DifficultyManager dm;
+    private Rulebook rulebook;
 
     private int enemyHealth = 100;
     private int enemyDamage = 15;
@@ -39,6 +41,7 @@ public class EnemyManager : MonoBehaviour
 
         pm = GameObject.Find("PlayerManager").GetComponent<PlayerManager>();
         dm = GameObject.Find("DifficultyManager").GetComponent<DifficultyManager>();
+        rulebook = GameObject.Find("DifficultyManager").GetComponent<Rulebook>();
 
         Init();
     }
@@ -94,6 +97,10 @@ public class EnemyManager : MonoBehaviour
     private void updatePlayerDetails() {
         enemyHealth = dm.getEnemyHealth();
         enemyDamage = dm.getEnemyDamage();
+    }
+
+    public void updateRuleBookEnemiesKilled() {
+        rulebook.updateEnemiesKilled();
     }
 
     // getter and setter functions ====================================================

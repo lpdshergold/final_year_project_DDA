@@ -34,6 +34,7 @@ public class PlayerLevel : MonoBehaviour
 
             pm.setPlayerLevel(playerlvl);
             rulebook.setLevelup(true);
+            rulebook.setPassOncePerLvl(true);
         }
     }
 
