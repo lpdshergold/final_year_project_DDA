@@ -66,7 +66,7 @@ public class Multiplier : MonoBehaviour
         int tempEDamage = (int)(eDamage * basicMultiplier);
         dm.setEnemyDamage(tempEDamage);
 
-        updateManagers(); 
+        updateManagers("all"); 
     }
 
     public void UpdateEnemyDamageHealthAmount() {
@@ -98,11 +98,29 @@ public class Multiplier : MonoBehaviour
 
         em.setEnemySpawnRate(2);
 
-        updateManagers();
+        updateManagers("enemy");
+    }
+    
+    public void TimerUpdateEnemySpeed(float updateSpeed) {
+        // update enemy movespeed - check it's not more than player move speed
+        if(dm.getEnemyMoveSpeed() < pm.getPlayerMoveSpeed()) {
+            dm.setEnemyMoveSpeed(dm.getEnemyMoveSpeed() + updateSpeed);
+
+            // if enemy move speed is more than the player, set eMoveSpeed to pMoveSpeed
+            if(dm.getEnemyMoveSpeed() > pm.getPlayerMoveSpeed()) {
+                dm.setEnemyMoveSpeed(pm.getPlayerMoveSpeed());
+            } else if (dm.getEnemyMoveSpeed() < 2.0f) {
+                dm.setEnemyMoveSpeed(2.0f);
+            }
+        }
+
+        Debug.Log("enemy move speed: " + dm.getEnemyMoveSpeed());
+
+        updateManagers("");
     }
 
-    private void updateManagers() {
-        pm.updateDetails = true;
+    private void updateManagers(string updatePlayer = "") {
+        pm.updatePlayerDetails(updatePlayer);
         em.updateDetails = true;
     }
 }

@@ -101,7 +101,6 @@ public class EnemyManager : MonoBehaviour
         enemyHealth = dm.getEnemyHealth();
         enemyDamage = dm.getEnemyDamage();
         enemyMoveSpeed = dm.getEnemyMoveSpeed();
-        Debug.Log("e move speed: " + enemyMoveSpeed);
     }
 
     public void updateRuleBookEnemiesKilled() {

@@ -46,7 +46,11 @@ public class Rulebook : MonoBehaviour
         }
 
         if(isDDAEnabled) {
-            RunScenarios();
+            PlayerKillsDeathsCheck();
+            PlayerHitCheck();
+            PlayerTooManyDeaths();
+            PlayerLowDamage();
+            TooManyPlayerHits();
         }
 
 /*        if(levelup && passOncePerLevel) {
@@ -97,19 +101,10 @@ public class Rulebook : MonoBehaviour
     // Rulebook scenarios
     /*
      * Things to add to rulebook - scenarios
-     * if the player kills a certain amount of enemies without dying increase enemy damage
-     * if player either levels up or doesn't get hit over a period of time - increase enemy speed
      * if the player is consistenly dying reduce enemy difficulty
      * if a player dies a certain amount of times before levelling up do something - this is probably a weight system thing
      * if the enemies don't do a certain amount of damage over a period of time - increae enemy amount
      */
-
-    private void RunScenarios() {
-        PlayerKillsDeathsCheck();
-        PlayerHitCheck();
-        PlayerTooManyDeaths();
-        PlayerLowDamage();
-    }
 
     // check if the player kills too many enemies before dying - update enemies damage + health + ememy amount
     private int playerDeathCheck = 0;
@@ -133,9 +128,43 @@ public class Rulebook : MonoBehaviour
         }
     }
 
-    // check to see if the enemy hasn't hit the player over a period of time - increase enemy speed + emeny amount
+    // check to see if the enemy hasn't hit the player over a period of time - increase enemy speed + enemy amount
+    private float playerHitTimer = 0.0f;
+    private int enemyHitPlayer = 0;
     private void PlayerHitCheck() {
+        playerHitTimer += Time.deltaTime;
 
+        if(enemyHitPlayer == enemyDamageHits) {
+            if(playerHitTimer >= 15.0f) {
+                playerHitTimer = 0.0f;
+                multiplier.TimerUpdateEnemySpeed(0.05f);
+            }
+        } else {
+            playerHitTimer = 0.0f;
+            enemyHitPlayer = enemyDamageHits;
+        }
+    }
+
+    private float tooManyPlayerHitsTimer = 0.0f;
+    private int isPlayerHitTooMuch = 0;
+    private void TooManyPlayerHits() {
+        tooManyPlayerHitsTimer += Time.deltaTime;
+
+        if (isPlayerHitTooMuch >= 4) {
+            tooManyPlayerHitsTimer = 0.0f;
+            isPlayerHitTooMuch = 0;
+            rulebookEnemyDamageHits = 0;
+
+            multiplier.TimerUpdateEnemySpeed(-0.25f);
+        } else {
+            isPlayerHitTooMuch = rulebookEnemyDamageHits;
+
+            if (tooManyPlayerHitsTimer >= 5.0f) {
+                tooManyPlayerHitsTimer = 0.0f;
+                isPlayerHitTooMuch = 0;
+                rulebookEnemyDamageHits = 0;
+            }
+        }
     }
 
     // if the player dies too much, reduce the enemy damage + move speed
