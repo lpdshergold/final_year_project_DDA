@@ -38,14 +38,11 @@ public class Multiplier : MonoBehaviour
 
     public void ddaLevelup(string pWeight) {
         if (pWeight == "small") {
-            smallPlayerMultiplierCal();
-            smallEnemyMultiplierCal();
+            basicMultiplierCal();
         } else if (pWeight == "medium") {
-            mediumPlayerMultiplierCal();
-            mediumEnemyMultiplierCal();
+            basicMultiplierCal();
         } else if (pWeight == "high") {
-            highPlayerMultiplierCal();
-            highEnemyMultiplierCal();
+            basicMultiplierCal();
         } else {
             Debug.Log("Error with weight lvl: Multiplier script"); 
         }
@@ -69,91 +66,43 @@ public class Multiplier : MonoBehaviour
         int tempEDamage = (int)(eDamage * basicMultiplier);
         dm.setEnemyDamage(tempEDamage);
 
-        pm.updateDetails = true;
-        em.updateDetails = true;
+        updateManagers(); 
     }
 
-    private void smallPlayerMultiplierCal() {
-        Debug.Log("Small player multiplier");
-        int pHealth = dm.getPlayerHealth();
-        int pDamage = dm.getPlayerDamage();
-
-        int tempHealth = (int)(pHealth * smallWeightMultiplier);
-        dm.setPlayerHealth(tempHealth);
-
-        int tempDamage = (int)(pDamage * smallWeightMultiplier);
-        dm.setPlayerDamage(tempDamage);
-
-        pm.updateDetails = true;
-    }
-
-    private void mediumPlayerMultiplierCal() {
-        Debug.Log("Medium player multiplier");
-        int pHealth = dm.getPlayerHealth();
-        int pDamage = dm.getPlayerDamage();
-
-        int tempHealth = (int)(pHealth * mediumWeightMultiplier);
-        dm.setPlayerHealth(tempHealth);
-
-        int tempDamage = (int)(pDamage * mediumWeightMultiplier);
-        dm.setPlayerDamage(tempDamage);
-
-        pm.updateDetails = true;
-    }
-
-    private void highPlayerMultiplierCal() {
-        Debug.Log("High player multiplier");
-        int pHealth = dm.getPlayerHealth();
-        int pDamage = dm.getPlayerDamage();
-
-        int tempHealth = (int)(pHealth * highWeightMultiplier);
-        dm.setPlayerHealth(tempHealth);
-
-        int tempDamage = (int)(pDamage * highWeightMultiplier);
-        dm.setPlayerDamage(tempDamage);
-
-        pm.updateDetails = true;
-    }
-
-    private void smallEnemyMultiplierCal() {
-        Debug.Log("Small enemy multiplier");
-        int eHealth = dm.getEnemyHealth();
-        int eDamage = dm.getEnemyDamage();
-
-        int tempEHealth = (int)(eHealth * smallWeightMultiplier);
-        dm.setEnemyHealth(tempEHealth);
-
-        int tempEDamage = (int)(eDamage * smallWeightMultiplier);
-        dm.setEnemyDamage(tempEDamage);
-
-        em.updateDetails = true;
-    }
-
-    private void mediumEnemyMultiplierCal() {
-        Debug.Log("Medium enemy multiplier");
+    public void UpdateEnemyDamageHealthAmount() {
         int eHealth = dm.getEnemyHealth();
         int eDamage = dm.getEnemyDamage();
 
         int tempEHealth = (int)(eHealth * mediumWeightMultiplier);
+
         dm.setEnemyHealth(tempEHealth);
 
         int tempEDamage = (int)(eDamage * mediumWeightMultiplier);
+
+        // check to see if multiplier increased eDamage - if not add 1
+        if (tempEDamage == eDamage) {
+            tempEDamage++;
+        }
+
+        // update enemy movespeed - check it's not more than player move speed
+        if (dm.getEnemyMoveSpeed() < pm.getPlayerMoveSpeed()) {
+            dm.setEnemyMoveSpeed(dm.getEnemyMoveSpeed() + 0.1f);
+
+            // if enemy move speed is more than the player, set eMoveSpeed to pMoveSpeed
+            if(em.getEnemyMoveSpeed() > pm.getPlayerMoveSpeed()) {
+                dm.setEnemyMoveSpeed(pm.getPlayerMoveSpeed());
+            }
+        }
+
         dm.setEnemyDamage(tempEDamage);
 
-        em.updateDetails = true;
+        em.setEnemySpawnRate(2);
+
+        updateManagers();
     }
 
-    private void highEnemyMultiplierCal() {
-        Debug.Log("High enemy multiplier");
-        int eHealth = dm.getEnemyHealth();
-        int eDamage = dm.getEnemyDamage();
-
-        int tempEHealth = (int)(eHealth * highWeightMultiplier);
-        dm.setEnemyHealth(tempEHealth);
-
-        int tempEDamage = (int)(eDamage * highWeightMultiplier);
-        dm.setEnemyDamage(tempEDamage);
-
+    private void updateManagers() {
+        pm.updateDetails = true;
         em.updateDetails = true;
     }
 }

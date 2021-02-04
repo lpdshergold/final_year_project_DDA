@@ -15,7 +15,7 @@ public class EnemyManager : MonoBehaviour
 
     private int enemyHealth = 100;
     private int enemyDamage = 15;
-    private float enemyMoveSpeed = 1;
+    private float enemyMoveSpeed = 2.0f;
 
     [SerializeField] private GameObject enemyPrefab;
     public int enemyAmount = 0;
@@ -68,6 +68,9 @@ public class EnemyManager : MonoBehaviour
 
         enemyHealth = dm.getEnemyHealth();
         enemyDamage = dm.getEnemyDamage();
+        enemyMoveSpeed = dm.getEnemyMoveSpeed();
+        maxEnemyAmount = dm.getEnemySpawnAmount();
+
 
         playerAtkDamage = pm.getPlayerDamage();
     }
@@ -97,10 +100,16 @@ public class EnemyManager : MonoBehaviour
     private void updatePlayerDetails() {
         enemyHealth = dm.getEnemyHealth();
         enemyDamage = dm.getEnemyDamage();
+        enemyMoveSpeed = dm.getEnemyMoveSpeed();
+        Debug.Log("e move speed: " + enemyMoveSpeed);
     }
 
     public void updateRuleBookEnemiesKilled() {
         rulebook.updateEnemiesKilled();
+    }
+
+    public void updatePlayerHits() {
+        rulebook.updatePlayerDamageHits();
     }
 
     // getter and setter functions ====================================================
@@ -114,7 +123,10 @@ public class EnemyManager : MonoBehaviour
 
     public float getEnemyMoveSpeed() { return enemyMoveSpeed; }
 
-    public void setEnemyMoveSpeed(float moveSpeed) { enemyMoveSpeed = moveSpeed; }
+    public void setEnemyMoveSpeed(float moveSpeed) { enemyMoveSpeed = moveSpeed; }    
+    
+    public int getEnemySpawnRate() { return maxEnemyAmount; }
 
+    public void setEnemySpawnRate(int newMaxEnemyAmount) { maxEnemyAmount += newMaxEnemyAmount; }
     // ================================================================================
 }

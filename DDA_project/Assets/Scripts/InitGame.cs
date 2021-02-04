@@ -16,7 +16,7 @@ public class InitGame : MonoBehaviour
     private const int hardHealth = 100;
     private const int easyDamage = 50;
     private const int mediumDamage = 30;
-    private const int hardDamage = 25;
+    private const int hardDamage = 25;    
 
     // enemy information 
     private const int easyEnemyHealth = 100;
@@ -24,7 +24,13 @@ public class InitGame : MonoBehaviour
     private const int hardEnemyHealth = 100;
     private const int easyEnemyDamage = 15;
     private const int mediumEnemyDamage = 20;
-    private const int hardEnemyDamage = 25;
+    private const int hardEnemyDamage = 25;    
+    private const int easyEnemySpawnAmount = 10;
+    private const int mediumEnemySpawnAmount = 15;
+    private const int hardEnemySpawnAmount = 20;
+    private const float easyEnemyMoveSpeed = 2.0f;
+    private const float mediumEnemyMoveSpeed = 2.25f;
+    private const float hardEnemyMoveSpeed = 2.5f;
 
     private bool isDDAEnabled = false;
     private bool sendOnce = false;
@@ -47,6 +53,8 @@ public class InitGame : MonoBehaviour
             dm.setPlayerDamage(easyDamage);
             dm.setEnemyHealth(easyEnemyHealth);
             dm.setEnemyDamage(easyEnemyDamage);
+            dm.setEnemyMoveSpeed(easyEnemyMoveSpeed);
+            dm.setEnemySpawnAmount(easyEnemySpawnAmount);
             dm.setDDAEnabled(isDDAEnabled);
             dm.updateDDAElsewhere(isDDAEnabled);
             dm.setGameDifficulty("easy");
@@ -56,6 +64,8 @@ public class InitGame : MonoBehaviour
             dm.setPlayerDamage(mediumDamage);
             dm.setEnemyHealth(mediumEnemyHealth);
             dm.setEnemyDamage(mediumEnemyDamage);
+            dm.setEnemyMoveSpeed(mediumEnemyMoveSpeed);
+            dm.setEnemySpawnAmount(mediumEnemySpawnAmount);
             dm.setDDAEnabled(isDDAEnabled);
             dm.updateDDAElsewhere(isDDAEnabled);
             dm.setGameDifficulty("medium");
@@ -65,6 +75,8 @@ public class InitGame : MonoBehaviour
             dm.setPlayerDamage(hardDamage);
             dm.setEnemyHealth(hardEnemyHealth);
             dm.setEnemyDamage(hardEnemyDamage);
+            dm.setEnemyMoveSpeed(hardEnemyMoveSpeed);
+            dm.setEnemySpawnAmount(hardEnemySpawnAmount);
             dm.setDDAEnabled(isDDAEnabled);
             dm.updateDDAElsewhere(isDDAEnabled);
             dm.setGameDifficulty("hard");

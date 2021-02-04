@@ -8,7 +8,7 @@ public class DifficultyManager : MonoBehaviour
 
     private Rulebook rulebook;
 
-    private int playerHealth, playerDamage, enemyHealth, enemyDamage;
+    private int playerHealth, playerDamage, enemyHealth, enemyDamage, enemySpawnAmount;
     private float enemyMoveSpeed;
 
     private bool isDDAEnabled = false;
@@ -50,6 +50,10 @@ public class DifficultyManager : MonoBehaviour
     public float getEnemyMoveSpeed() { return enemyMoveSpeed; }
 
     public void setEnemyMoveSpeed(float moveSpeed) { enemyMoveSpeed = moveSpeed; }
+
+    public int getEnemySpawnAmount() { return enemySpawnAmount; }
+
+    public void setEnemySpawnAmount(int eSpawnAmount) { enemySpawnAmount = eSpawnAmount; }
 
     public bool getDDAEnabled() { return isDDAEnabled; }
 

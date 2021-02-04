@@ -51,8 +51,7 @@ public class Enemy : MonoBehaviour
 
     private void MoveEnemy() {
         if (player) {
-            playerDirection = player.transform.position - transform.position;
-            rb.MovePosition((Vector2)transform.position + (playerDirection * moveSpeed * Time.deltaTime));
+            transform.position = Vector2.MoveTowards(transform.position, player.transform.position, moveSpeed * Time.deltaTime);
         } else {
             player = GameObject.FindGameObjectWithTag("Player");
         }
@@ -61,6 +60,7 @@ public class Enemy : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision) {
         if(collision.gameObject.tag == "Bullet") {
             eHealth -= playerAtkDamage;
+            em.updatePlayerHits();
         }
     }
 

@@ -10,11 +10,12 @@ public class WeightSystem : MonoBehaviour
 
     private bool doOnce = false;
 
-    private int weight = 0;
-    private int playerWeight = 0;
-    private int enemyWeight = 0;
+    private int playerHealthWeight = 0;
+    private int playerDamageWeight = 0;
+    private int enemyHealthWeight = 0;
+    private int enemyDamageWeight = 0;
 
-    private int playerHealth, playerMaxHealth, playerDeaths, enemiesKilled;
+    private int playerHealth, playerMaxHealth, playerDeaths, playerDamageHits, enemyDamageHits, enemySpawnAmount;
 
     void Start()
     {
@@ -29,52 +30,66 @@ public class WeightSystem : MonoBehaviour
         }
     }
 
-    public void passWeightDetails(int pHealth, int pMaxHealth, int pDeaths, int eKilled) {
+    public void passWeightDetails(int pHealth, int pMaxHealth, int pDeaths, int pDamageHit, int eDamageHit, int eSpawnAmount) {
         playerHealth = pHealth; 
         playerMaxHealth = pMaxHealth;
-        enemiesKilled = eKilled;
         playerDeaths = pDeaths;
+        playerDamageHits = pDamageHit;
+        enemyDamageHits = eDamageHit;
+        enemySpawnAmount = eSpawnAmount;
 
         weightSteps();
     }
 
     private void weightSteps() { // Change this to playerWeightSteps and add an enemy function once basics are done
         playerHealthWeighting();
-        playerDealthWeighting();
+        playerDeathWeighting();
+        playerDamageHitsWeighting();
     }
 
-    private void playerHealthWeighting() {
+    private void playerHealthWeighting() { // player health weighting 
         if(playerHealth == playerMaxHealth) {
             Debug.Log("no change in player health weighting");
             return;
         } else if(playerHealth >= Convert.ToDouble((playerMaxHealth / 100) * 75)) {
             Debug.Log("player health weighting up by 1");
-            weight += 1;
+            playerHealthWeight += 1;
         } else if (playerHealth >= Convert.ToDouble((playerMaxHealth / 100) * 35) && playerHealth <= Convert.ToDouble((playerMaxHealth / 100) * 75)) {
             Debug.Log("player health weighting up by 2");
-            weight += 2;
+            playerHealthWeight += 2;
         } else if (playerHealth <= Convert.ToDouble((playerMaxHealth / 100) * 35)) {
             Debug.Log("player health weighting up by 3");
-            weight += 3;
+            playerHealthWeight += 3;
         }
     }
 
-    private void playerDealthWeighting() {
+    private void playerDeathWeighting() { // player health weighting
         if(playerDeaths == 0) {
             Debug.Log("no change in player deaths weighting");
         } else if ( playerDeaths == 1 ) {
             Debug.Log("player death weighting up by 1");
-            weight += 1;
+            playerHealthWeight += 1;
         } else if (playerDeaths == 2) {
             Debug.Log("player death weighting up by 2");
-            weight += 2;
+            playerHealthWeight += 2;
         } else if (playerDeaths > 2) {
             Debug.Log("player death weighting up by 3");
-            weight += 3;
+            playerHealthWeight += 3;
         }
     }
 
-    private void enemyWeightSteps() {
-
+    private void playerDamageHitsWeighting() { // player damage weighting
+        if(enemyDamageHits == 0) {
+            return;
+        } else if(enemyDamageHits >= playerDamageHits) {
+            Debug.Log("player damage weighting up by 3");
+            playerDamageWeight += 3;
+        } else if(enemyDamageHits >= playerDamageHits / 2) {
+            Debug.Log("player damage weighting up by 2");
+            playerDamageWeight += 2;
+        } else {
+            Debug.Log("player damage weighting up by 1");
+            playerDamageWeight += 1;
+        }
     }
 }

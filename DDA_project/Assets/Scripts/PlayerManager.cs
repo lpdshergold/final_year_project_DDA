@@ -16,6 +16,7 @@ public class PlayerManager : MonoBehaviour
 
     private int startPlayerHealth;
     private int playerHealth = 100;
+    private float playerMoveSpeed = 3.0f;
     private int playerMaxHealth;
     private int playerLevel = 1;
     private int playerDamage = 100;
@@ -88,6 +89,10 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    public void updateEnemyHits() {
+        rulebook.updateEnemyDamageHits();
+    }
+
     // getter and setter functions ====================================================
     public int getPlayerHealth() { return playerHealth; }
 
@@ -112,6 +117,8 @@ public class PlayerManager : MonoBehaviour
     public bool getIsPlayerDead() { return isPlayerDead; }
 
     public void setIsPlayerDead(bool dead) { isPlayerDead = dead; }
+
+    public float getPlayerMoveSpeed() { return playerMoveSpeed; }
 
     // ================================================================================
 }

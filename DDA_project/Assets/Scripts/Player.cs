@@ -8,12 +8,12 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject bullet;
     [SerializeField] private Transform bulletSpawn;
 
-    [SerializeField] private int playerSpeed = 2;
+    [SerializeField] private float playerSpeed = 0f;
     [SerializeField] private float delayShoot = .25f;
     [SerializeField] private float destroyBulletTime = 5f;
     [SerializeField] private float bulletSpeed = 8f;
 
-    [SerializeField] private float delayEnemyAtk = 1f;
+    [SerializeField] private float delayEnemyAtk = .5f;
 
     private Transform weaponAim;
     private Rigidbody2D rb;
@@ -45,6 +45,7 @@ public class Player : MonoBehaviour
         
         // Get info from GameManager
         pHealth = pm.getPlayerHealth();
+        playerSpeed = pm.getPlayerMoveSpeed();
         enemyDamage = pm.enemyDamage;
     }
 
@@ -150,6 +151,7 @@ public class Player : MonoBehaviour
         // check for collision with enemy
         if(collision.gameObject.tag == "Enemy") {
             pHealth -= enemyDamage;
+            pm.updateEnemyHits();
         }
         // update the player health in GameManger
         pm.setPlayerHealth(pHealth);
