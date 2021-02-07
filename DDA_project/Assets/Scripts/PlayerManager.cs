@@ -8,6 +8,7 @@ public class PlayerManager : MonoBehaviour
     public static PlayerManager playerManagerInstance = null;
 
     [SerializeField] private GameObject player;
+    private Player getPlayer;
 
     private Transform playerSpawn;
 
@@ -41,6 +42,10 @@ public class PlayerManager : MonoBehaviour
 
     private void Update() {
         PlayerRespawn();
+
+        if(!getPlayer) {
+            getPlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        }
     }
 
     private void Init() {
@@ -74,8 +79,7 @@ public class PlayerManager : MonoBehaviour
             Debug.Log("Didn't need updating = PlayerManager");
         }
 
-        Player p = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-        p.updateDetails();
+        getPlayer.updateDetails();
     }
 
     // find playerSpawn location and create player

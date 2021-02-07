@@ -119,6 +119,24 @@ public class Multiplier : MonoBehaviour
         updateManagers("");
     }
 
+    public void UpdateEnemyDamage(int updateDamage) {
+        int tempCheck = dm.getEnemyDamage();
+        tempCheck += updateDamage;
+        if (tempCheck >= 10) {
+            dm.hardSetEnemyDamage(updateDamage);
+        } else {
+            Debug.Log("Damage would be too low");
+        }
+
+        updateManagers("enemy");
+    }
+
+    public void UpdateEnemySpawnAmount(int amount) {
+        em.setEnemySpawnRate(amount);
+
+        updateManagers("");
+    }
+
     private void updateManagers(string updatePlayer = "") {
         pm.updatePlayerDetails(updatePlayer);
         em.updateDetails = true;

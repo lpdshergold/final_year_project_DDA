@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq.Expressions;
+using System.Security.Cryptography;
 using UnityEditor.UIElements;
 using UnityEngine;
 
@@ -80,6 +81,7 @@ public class EnemyManager : MonoBehaviour
     }
 
     // spawn enemy function
+    private int saveSpawnPos = 0;
     private void SpawnEnemies() {
         // if max enemies are in the game, exit out
         if (enemyAmount >= maxEnemyAmount) { return; }
@@ -87,12 +89,21 @@ public class EnemyManager : MonoBehaviour
         if(spawnTime >= enemySpawnDelay) {
             spawnTime = 0.0f;
             while(enemyAmount < maxEnemyAmount) {
-                enemyAmount++;
+                for (int i = saveSpawnPos; i <= enemySpawns.Length; i++) {
+                    if (saveSpawnPos == enemySpawns.Length) {
+                        saveSpawnPos = 0;
+                        i = 0;
+                    } else { saveSpawnPos++; }
 
-                // get a random enemy spawn with random.range
-                GameObject spawn = enemySpawns[Random.Range(0, 4)];
-                // create a new enemy gameobject
-                _ = Instantiate(enemyPrefab, spawn.transform.position, spawn.transform.rotation);
+                    if (enemyAmount >= maxEnemyAmount) { return; }
+
+                    enemyAmount++;
+
+                    // get the spawn location
+                    GameObject spawn = enemySpawns[i];
+                    // create a new enemy gameobject
+                    _ = Instantiate(enemyPrefab, spawn.transform.position, spawn.transform.rotation);
+                }
             }
         }
     }

@@ -117,6 +117,10 @@ public class Player : MonoBehaviour
             isFiring = true;
             // create the bullet gameObject
             GameObject shotBullet = Instantiate(bullet, bulletSpawn.position, bulletSpawn.rotation);
+
+            // Ignore the player box colliders
+            Physics2D.IgnoreCollision(shotBullet.GetComponent<BoxCollider2D>(), GetComponent<BoxCollider2D>());
+            
             // check flip direction 
             if (fX) {
                 // if flipped, reverse velocity

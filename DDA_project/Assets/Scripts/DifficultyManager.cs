@@ -47,6 +47,8 @@ public class DifficultyManager : MonoBehaviour
 
     public void setEnemyDamage(int damage) { enemyDamage = damage; }
 
+    public void hardSetEnemyDamage(int damage) { enemyDamage += damage; }
+
     public float getEnemyMoveSpeed() { return enemyMoveSpeed; }
 
     public void setEnemyMoveSpeed(float moveSpeed) { enemyMoveSpeed = moveSpeed; }

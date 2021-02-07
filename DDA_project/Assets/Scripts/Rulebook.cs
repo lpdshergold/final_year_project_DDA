@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class Rulebook : MonoBehaviour
@@ -26,10 +27,11 @@ public class Rulebook : MonoBehaviour
 
     private int rulebookEnemiesKilled = 0;
     private int rulebookEnemyDamageHits = 0;
-    private int rulebookEnemySpawnRate = 0;
     private int rulebookPlayerDamageHits = 0;
-    private int rulebookPlayerHealth = 0;
-    private int rulebookPlayerMaxHealth = 0;
+    private int rulebookIsPlayerNotHitEnough = 0;
+    private int rulebookPlayerDeath = 0;
+
+    public bool updateRulebook = false;
 
     void Start()
     {
@@ -45,15 +47,17 @@ public class Rulebook : MonoBehaviour
             doOnce = true;
         }
 
-        if(isDDAEnabled) {
-            PlayerKillsDeathsCheck();
-            PlayerHitCheck();
+        if(isDDAEnabled && updateRulebook) {
+            // death checks
             PlayerTooManyDeaths();
-            PlayerLowDamage();
+            PlayerKillsDeathsCheck();
+            // timer checks
+            PlayerHitCheck();
             TooManyPlayerHits();
+            NotEnoughEnemyDamage();
         }
 
-/*        if(levelup && passOncePerLevel) {
+        if(levelup && isDDAEnabled && passOncePerLevel) {
             passOncePerLevel = false;
 
             playerHealth = pm.getPlayerHealth();
@@ -71,7 +75,7 @@ public class Rulebook : MonoBehaviour
         } else if (levelup && !isDDAEnabled) {
             levelup = false;
             multiplier.basicLevelUp();
-        }*/
+        }
     }
 
     private void ResetVaraibles() {
@@ -82,28 +86,13 @@ public class Rulebook : MonoBehaviour
         enemyDamageHits = 0;
     }
 
-    public void setDDA(bool enable) { isDDAEnabled = enable; }
-
-    public void setPassOncePerLvl(bool isPassed) { passOncePerLevel = isPassed; }
-
-    public void setLevelup(bool plevel) { levelup = plevel; }
-
-    public void setWeightLvl( string weight) { weightLvl = weight; }
-
-    public void updateEnemiesKilled() { enemiesKilled++; rulebookEnemiesKilled++; }
-
-    public void updatePlayerDeaths() { playerDeaths++; }
-
-    public void updatePlayerDamageHits() { playerDamageHits++; rulebookPlayerDamageHits++; }
-
-    public void updateEnemyDamageHits() { enemyDamageHits++; rulebookEnemyDamageHits++; }
-
     // Rulebook scenarios
     /*
      * Things to add to rulebook - scenarios
      * if the player is consistenly dying reduce enemy difficulty
      * if a player dies a certain amount of times before levelling up do something - this is probably a weight system thing
      * if the enemies don't do a certain amount of damage over a period of time - increae enemy amount
+     * Maybe do something with speed 
      */
 
     // check if the player kills too many enemies before dying - update enemies damage + health + ememy amount
@@ -128,6 +117,27 @@ public class Rulebook : MonoBehaviour
         }
     }
 
+    // if the player dies too much, reduce the enemy damage + move speed
+    private float playerDeathTimer = 0.0f;
+    private void PlayerTooManyDeaths() {
+        playerDeathTimer += Time.deltaTime;
+
+        if (playerDeathTimer >= 30.0 || rulebookPlayerDeath > 4) {
+            if (rulebookPlayerDeath >= 4) {
+                multiplier.UpdateEnemyDamage(-15);
+            } else if (rulebookPlayerDeath == 3) {
+                multiplier.UpdateEnemyDamage(-10);
+            } else if (rulebookPlayerDeath == 2) {
+                multiplier.UpdateEnemyDamage(-5);
+            } else {
+                Debug.Log("No action needed with amount of player deaths");
+            }
+
+            rulebookPlayerDeath = 0;
+            playerDeathTimer = 0.0f;
+        }
+    }
+
     // check to see if the enemy hasn't hit the player over a period of time - increase enemy speed + enemy amount
     private float playerHitTimer = 0.0f;
     private int enemyHitPlayer = 0;
@@ -145,6 +155,7 @@ public class Rulebook : MonoBehaviour
         }
     }
 
+    // check to see if the player is hit a specific amount in under 5 seconds and reduce the enemy speed
     private float tooManyPlayerHitsTimer = 0.0f;
     private int isPlayerHitTooMuch = 0;
     private void TooManyPlayerHits() {
@@ -167,13 +178,43 @@ public class Rulebook : MonoBehaviour
         }
     }
 
-    // if the player dies too much, reduce the enemy damage + move speed
-    private void PlayerTooManyDeaths() {
+    // if the enemies don't do a certain amount of damage over a period of time - increae enemy amount
+    private float notEnoughEnemyDamageTimer = 0.0f;
+    private void NotEnoughEnemyDamage() {
+        // do a while loop around this when enemy sight is activated for any enemy
+        notEnoughEnemyDamageTimer += Time.deltaTime;
 
+        if(notEnoughEnemyDamageTimer >= 10.0f) {
+
+            if(rulebookIsPlayerNotHitEnough <= 1) {
+                Debug.Log("1 or less damge");
+                multiplier.UpdateEnemySpawnAmount(5);
+            } else if (rulebookIsPlayerNotHitEnough <= 2) {
+                Debug.Log("2 or less damge");
+                multiplier.UpdateEnemySpawnAmount(3);
+            } else if (rulebookIsPlayerNotHitEnough <= 3) {
+                Debug.Log("3 or less damge");
+                multiplier.UpdateEnemySpawnAmount(1);
+            }
+
+            notEnoughEnemyDamageTimer = 0.0f;
+            rulebookIsPlayerNotHitEnough = 0;
+        }
     }
 
-    // if the enemies have not hit the player in a specific amount of time - increase enemy amount
-    private void PlayerLowDamage() {
+    public void setDDA(bool enable) { isDDAEnabled = enable; }
 
-    }
+    public void setPassOncePerLvl(bool isPassed) { passOncePerLevel = isPassed; }
+
+    public void setLevelup(bool plevel) { levelup = plevel; }
+
+    public void setWeightLvl(string weight) { weightLvl = weight; }
+
+    public void updateEnemiesKilled() { enemiesKilled++; rulebookEnemiesKilled++; }
+
+    public void updatePlayerDeaths() { playerDeaths++; rulebookPlayerDeath++; }
+
+    public void updatePlayerDamageHits() { playerDamageHits++; rulebookPlayerDamageHits++; }
+
+    public void updateEnemyDamageHits() { enemyDamageHits++; rulebookEnemyDamageHits++; rulebookIsPlayerNotHitEnough++; }
 }

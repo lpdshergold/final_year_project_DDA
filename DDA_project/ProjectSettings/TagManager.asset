@@ -9,6 +9,7 @@ TagManager:
   - Bullet
   - PlayerSpawn
   - EnemySpawn
+  - Exit
   layers:
   - Default
   - TransparentFX
