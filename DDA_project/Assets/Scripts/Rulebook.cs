@@ -86,14 +86,7 @@ public class Rulebook : MonoBehaviour
         enemyDamageHits = 0;
     }
 
-    // Rulebook scenarios
-    /*
-     * Things to add to rulebook - scenarios
-     * if the player is consistenly dying reduce enemy difficulty
-     * if a player dies a certain amount of times before levelling up do something - this is probably a weight system thing
-     * if the enemies don't do a certain amount of damage over a period of time - increae enemy amount
-     * Maybe do something with speed 
-     */
+    // Rulebook scenarios ===================================================================================
 
     // check if the player kills too many enemies before dying - update enemies damage + health + ememy amount
     private int playerDeathCheck = 0;
@@ -201,6 +194,8 @@ public class Rulebook : MonoBehaviour
             rulebookIsPlayerNotHitEnough = 0;
         }
     }
+
+    // End of Rulebook scenarios ============================================================================
 
     public void setDDA(bool enable) { isDDAEnabled = enable; }
 
