@@ -8,14 +8,13 @@ public class WeightSystem : MonoBehaviour
     private PlayerManager pm;
     private Rulebook rulebook;
 
+    private IEnumerator weightingCoroutine;
+
     private bool doOnce = false;
 
     private int playerLvl = 1;
 
-    private int playerHealthWeight = 0;
-    private int playerDamageWeight = 0;
-    private int enemyHealthWeight = 0;
-    private int enemyDamageWeight = 0;
+    private int playerWeighting = 0;
 
     private int playerHealth, playerMaxHealth, playerDeaths, playerDamageHits, enemyDamageHits, enemySpawnAmount;
 
@@ -52,86 +51,88 @@ public class WeightSystem : MonoBehaviour
         allPlayerDamageHits.Add(playerDamageHits);
         allEnemyDamageHits.Add(enemyDamageHits);
 
-        weightSteps(); // Turn this function into a coroutine to run the functions before calculating the weight
+        weightingCoroutine = startWeightChecking(2.0f);
+        StartCoroutine(weightingCoroutine);
+
+        //weightSteps();
     }
 
-    private void weightSteps() { // Change this to playerWeightSteps and add an enemy function once basics are done
+    private IEnumerator startWeightChecking(float waitTime) {
         playerHealthWeighting();
         playerDeathWeighting();
         playerDamageHitsWeighting();
+
+        yield return new WaitForSeconds(waitTime);
+        
+        Debug.Log("Coroutine ended!");
+        weighting();
     }
 
-    private void playerHealthWeighting() { // player health weighting 
-        if(playerLvl <= 4) {
+    private void weighting() {
+        Debug.Log("Send weighting back to rulebook from here");
+    }
+
+    private void playerHealthWeighting() { // player weighting 
+        if(playerLvl <= 3) {
+
             if(playerHealth == playerMaxHealth || playerHealth >= Convert.ToDouble((playerMaxHealth / 100) * 71)) {
                 return;
-            } else if(playerHealth >= Convert.ToDouble((playerMaxHealth / 100) * 50) && playerHealth < Convert.ToDouble((playerMaxHealth / 100) * 70)) {
-                playerHealthWeight += 1;
-            } else if(playerHealth >= Convert.ToDouble((playerMaxHealth / 100) * 30) && playerHealth < Convert.ToDouble((playerMaxHealth / 100) * 50)) {
-                playerHealthWeight += 2;
+            } else if(playerHealth >= Convert.ToDouble((playerMaxHealth / 100) * 50) && playerHealth <= Convert.ToDouble((playerMaxHealth / 100) * 70)) {
+                playerWeighting += 1;
+            } else if(playerHealth >= Convert.ToDouble((playerMaxHealth / 100) * 30) && playerHealth <= Convert.ToDouble((playerMaxHealth / 100) * 50)) {
+                playerWeighting += 2;
             } else if(playerHealth <= Convert.ToDouble((playerMaxHealth / 100) * 30)) {
-                playerHealthWeight += 3;
+                playerWeighting += 3;
             }
+
         } else {
 
-            int averagePlayerHealth = 0, medianPlayerHealth, modePlayerHealth = 0;
+            int averagePlayerHealth = averageOfLastThreeLevels(allPlayerHealth);
 
-            allPlayerHealth.Sort();
-
-            foreach (int aHealth in allPlayerHealth) {
-                averagePlayerHealth += aHealth;
+            if(averagePlayerHealth > (Convert.ToDouble(playerMaxHealth) / 100.0) * 70.0) {
+                Debug.Log("Average Player Health: " + averagePlayerHealth + " No PlayerHealthWeight added");
+                return;
+            } else if (averagePlayerHealth > (Convert.ToDouble(playerMaxHealth / 100.0) * 50.0) && Convert.ToDouble(averagePlayerHealth) <= (Convert.ToDouble(playerMaxHealth / 100.0) * 70.0)) {
+                Debug.Log("Average Player Health: " + averagePlayerHealth + " PlayerHealthWeight + 1");
+                playerWeighting += 1;
+            } else if (averagePlayerHealth > (Convert.ToDouble(playerMaxHealth / 100.0) * 30.0) && Convert.ToDouble(averagePlayerHealth) <= (Convert.ToDouble(playerMaxHealth / 100.0) * 50.0)) {
+                Debug.Log("Average Player Health: " + averagePlayerHealth + " PlayerHealthWeight + 2");
+                playerWeighting += 2;
+            } else if (averagePlayerHealth <= Convert.ToDouble(playerMaxHealth / 100.0) * 30.0) {
+                Debug.Log("Average Player Health: " + averagePlayerHealth + " PlayerHealthWeight + 3");
+                playerWeighting += 3;
             }
-
-            if (allPlayerHealth.Count % 2 == 0) { // Even
-                int numOne = allPlayerHealth.Count / 2 - 1;
-                int numTwo = allPlayerHealth.Count / 2;
-                int choice = (numOne + numTwo) / 2;
-
-                medianPlayerHealth = allPlayerHealth[choice];
-            } else { // Odd
-                int choice = allPlayerHealth.Count / 2;
-                medianPlayerHealth = allPlayerHealth[choice];
-            }
-
-            Dictionary<int, int> modeData = new Dictionary<int, int>();
-            foreach(int key in allPlayerHealth) {
-                if(modeData.ContainsKey(key)) {
-                    modeData[key]++;
-                } else {
-                    modeData.Add(key, 1);
-                }
-            }
-
-            int mostCommonNum = 0;
-            foreach(KeyValuePair<int, int> data in modeData) {
-                if(data.Value > mostCommonNum) {
-                    modePlayerHealth = data.Key;
-                    mostCommonNum = data.Value;
-                }
-                Debug.Log("Mode Data Key: " + data.Key + " Mode Data Value: " + data.Value);
-            }
-
-            averagePlayerHealth = averagePlayerHealth / allPlayerHealth.Count;
-
-            Debug.Log("Average Player Health: " + averagePlayerHealth);
-            Debug.Log("Median Player Health: " + medianPlayerHealth);
-            Debug.Log("Mode Player Health: " + modePlayerHealth);
         }
     }
 
-    private void playerDeathWeighting() { // player health weighting
-        if(playerLvl <= 4) {
+    private void playerDeathWeighting() { // player weighting
+        if(playerLvl <= 3) {
             if(playerDeaths == 0) {
                 return;
             } else if(playerDeaths == 1) {
-                playerHealthWeight += 1;
+                playerWeighting += 1;
             } else if(playerDeaths == 2) {
-                playerHealthWeight += 2;
+                playerWeighting += 2;
             } else if(playerDeaths > 2) {
-                playerHealthWeight += 3;
+                playerWeighting += 3;
             }
         } else {
-            Debug.Log("Do stuff with the average of deaths stored beforehand");
+
+            int averagePlayerDeaths = averageOfLastThreeLevels(allPlayerDeaths);
+
+            if(averagePlayerDeaths == 0) {
+                Debug.Log("Average Player Deaths: " + averagePlayerDeaths + " No PlayerDeathWeight added");
+                return;
+            } else if(averagePlayerDeaths == 1) {
+                Debug.Log("Average Player Deaths: " + averagePlayerDeaths + " PlayerDeathWeight added + 1");
+                playerWeighting += 1;
+            } else if(averagePlayerDeaths == 2) {
+                Debug.Log("Average Player Deaths: " + averagePlayerDeaths + " PlayerDeathWeight added + 2");
+                playerWeighting += 2;
+            } else if(averagePlayerDeaths > 2) {
+                Debug.Log("Average Player Deaths: " + averagePlayerDeaths + " PlayerDeathWeight added + 3");
+                playerWeighting += 3;
+            }
         }
     }
 
@@ -139,11 +140,88 @@ public class WeightSystem : MonoBehaviour
         if(enemyDamageHits == 0) {
             return;
         } else if(enemyDamageHits >= playerDamageHits) {
-            playerDamageWeight += 3;
+            playerWeighting += 3;
         } else if(enemyDamageHits >= playerDamageHits / 2) {
-            playerDamageWeight += 2;
+            playerWeighting += 2;
         } else {
-            playerDamageWeight += 1;
+            playerWeighting += 1;
         }
+    }
+
+    private int average(List<int> averageList) {
+        List<int> tempList = averageList;
+        int tempAverage = 0;
+
+        foreach(int aHealth in tempList) {
+            tempAverage += aHealth;
+        }
+
+        tempAverage /= tempList.Count;
+
+        return tempAverage;
+    }
+
+    private int averageOfLastThreeLevels(List<int> averageList) {
+        List<int> tempList = averageList;
+        int tempAverage = 0;
+
+        // reverse list to get average of last 3 levels
+        tempList.Reverse();
+        int i = 0;
+        while(i <= 2) {
+            tempAverage += tempList[i];
+            i++;
+        }
+
+        tempAverage /= 3;
+
+        return tempAverage;
+    }
+
+    private int median(List<int> medianList) {
+        List<int> tempList = medianList;
+        tempList.Sort();
+
+        int tempMedian;
+
+        if(tempList.Count % 2 == 0) { // Even
+            int numOne = tempList.Count / 2 - 1;
+            int numTwo = tempList.Count / 2;
+            int choice = (numOne + numTwo) / 2;
+
+            tempMedian = tempList[choice];
+        } else { // Odd
+            int choice = tempList.Count / 2;
+            tempMedian = allPlayerHealth[choice];
+        }
+
+        return tempMedian;
+    }
+
+    private int mode(List<int> modeList) {
+        List<int> tempList = modeList;
+        tempList.Sort();
+
+        int tempModeData = 0;
+
+        Dictionary<int, int> modeData = new Dictionary<int, int>();
+        foreach(int key in tempList) {
+            if(modeData.ContainsKey(key)) {
+                modeData[key]++;
+            } else {
+                modeData.Add(key, 1);
+            }
+        }
+
+        int mostCommonNum = 0;
+        foreach(KeyValuePair<int, int> data in modeData) {
+            if(data.Value > mostCommonNum) {
+                tempModeData = data.Key;
+                mostCommonNum = data.Value;
+            }
+            Debug.Log("Mode Data Key: " + data.Key + " Mode Data Value: " + data.Value);
+        }
+
+        return tempModeData;
     }
 }

@@ -47,7 +47,8 @@ public class Rulebook : MonoBehaviour
             doOnce = true;
         }
 
-        if(isDDAEnabled && updateRulebook) {
+        // add && updateRulebook if enemy sight is used
+        if(isDDAEnabled) {
             // death checks
             PlayerTooManyDeaths();
             PlayerKillsDeathsCheck();
@@ -93,7 +94,7 @@ public class Rulebook : MonoBehaviour
     private int playerKillsDeathCounter = 0;
     private void PlayerKillsDeathsCheck() {
         if (playerDeathCheck == playerDeaths) {
-            if (playerKillsDeathCounter >= 10) {
+            if (playerKillsDeathCounter >= 30) {
                 playerKillsDeathCounter = 0;
                 rulebookEnemiesKilled = 0;
 
@@ -177,14 +178,14 @@ public class Rulebook : MonoBehaviour
         // do a while loop around this when enemy sight is activated for any enemy
         notEnoughEnemyDamageTimer += Time.deltaTime;
 
-        if(notEnoughEnemyDamageTimer >= 10.0f) {
+        if(notEnoughEnemyDamageTimer >= 30.0f) {
 
             if(rulebookIsPlayerNotHitEnough <= 1) {
                 Debug.Log("1 or less damge");
-                multiplier.UpdateEnemySpawnAmount(5);
+                multiplier.UpdateEnemySpawnAmount(3);
             } else if (rulebookIsPlayerNotHitEnough <= 2) {
                 Debug.Log("2 or less damge");
-                multiplier.UpdateEnemySpawnAmount(3);
+                multiplier.UpdateEnemySpawnAmount(2);
             } else if (rulebookIsPlayerNotHitEnough <= 3) {
                 Debug.Log("3 or less damge");
                 multiplier.UpdateEnemySpawnAmount(1);

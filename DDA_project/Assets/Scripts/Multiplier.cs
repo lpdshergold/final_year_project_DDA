@@ -96,7 +96,7 @@ public class Multiplier : MonoBehaviour
 
         dm.setEnemyDamage(tempEDamage);
 
-        em.setEnemySpawnRate(2);
+        em.setEnemySpawnRate(1);
 
         updateManagers("enemy");
     }
