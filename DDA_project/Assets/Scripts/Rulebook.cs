@@ -48,7 +48,7 @@ public class Rulebook : MonoBehaviour
         }
 
         // add && updateRulebook if enemy sight is used
-        if(isDDAEnabled) {
+        if(isDDAEnabled && updateRulebook) {
             // death checks
             PlayerTooManyDeaths();
             PlayerKillsDeathsCheck();
@@ -94,7 +94,7 @@ public class Rulebook : MonoBehaviour
     private int playerKillsDeathCounter = 0;
     private void PlayerKillsDeathsCheck() {
         if (playerDeathCheck == playerDeaths) {
-            if (playerKillsDeathCounter >= 30) {
+            if (playerKillsDeathCounter >= 20) {
                 playerKillsDeathCounter = 0;
                 rulebookEnemiesKilled = 0;
 
@@ -141,7 +141,7 @@ public class Rulebook : MonoBehaviour
         if(enemyHitPlayer == enemyDamageHits) {
             if(playerHitTimer >= 15.0f) {
                 playerHitTimer = 0.0f;
-                multiplier.TimerUpdateEnemySpeed(0.05f);
+                multiplier.TimerUpdateEnemySpeed(0.1f);
             }
         } else {
             playerHitTimer = 0.0f;
@@ -172,7 +172,7 @@ public class Rulebook : MonoBehaviour
         }
     }
 
-    // if the enemies don't do a certain amount of damage over a period of time - increae enemy amount
+    // if the enemies don't do a certain amount of damage over a period of time - increase enemy amount
     private float notEnoughEnemyDamageTimer = 0.0f;
     private void NotEnoughEnemyDamage() {
         // do a while loop around this when enemy sight is activated for any enemy
@@ -181,13 +181,10 @@ public class Rulebook : MonoBehaviour
         if(notEnoughEnemyDamageTimer >= 30.0f) {
 
             if(rulebookIsPlayerNotHitEnough <= 1) {
-                Debug.Log("1 or less damge");
                 multiplier.UpdateEnemySpawnAmount(3);
-            } else if (rulebookIsPlayerNotHitEnough <= 2) {
-                Debug.Log("2 or less damge");
-                multiplier.UpdateEnemySpawnAmount(2);
             } else if (rulebookIsPlayerNotHitEnough <= 3) {
-                Debug.Log("3 or less damge");
+                multiplier.UpdateEnemySpawnAmount(2);
+            } else if (rulebookIsPlayerNotHitEnough <= 5) {
                 multiplier.UpdateEnemySpawnAmount(1);
             }
 

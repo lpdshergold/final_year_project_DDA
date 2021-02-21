@@ -21,11 +21,14 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] private GameObject enemyPrefab;
     public int enemyAmount = 0;
     private int maxEnemyAmount = 10;
+    private int maxMaxEnemyAmount = 25;
 
     private float spawnTime = 0.0f;
     private float enemySpawnDelay = 3f; 
 
-    private GameObject[] enemySpawns;
+    public GameObject[] enemySpawns;
+
+    public bool resetEnemyAmount = false;
 
     [HideInInspector] public int playerAtkDamage;
 
@@ -62,6 +65,14 @@ public class EnemyManager : MonoBehaviour
             updateDetails = false;
             updatePlayerDetails();
         }
+
+        if(enemySpawns[0] == null) {
+            GetEnemySpawnLocations();
+            if (resetEnemyAmount == true) {
+                enemyAmount = 0;
+                resetEnemyAmount = false;
+            }
+        }
     }
 
     private void Init() {
@@ -88,22 +99,27 @@ public class EnemyManager : MonoBehaviour
 
         if(spawnTime >= enemySpawnDelay) {
             spawnTime = 0.0f;
-            while(enemyAmount < maxEnemyAmount) {
-                for (int i = saveSpawnPos; i <= enemySpawns.Length; i++) {
-                    if (saveSpawnPos == enemySpawns.Length) {
-                        saveSpawnPos = 0;
-                        i = 0;
-                    } else { saveSpawnPos++; }
+            if (maxEnemyAmount != maxMaxEnemyAmount && maxEnemyAmount < maxMaxEnemyAmount) {
+                while(enemyAmount < maxEnemyAmount) {
+                    for (int i = saveSpawnPos; i <= enemySpawns.Length; i++) {
+                        if (saveSpawnPos == enemySpawns.Length) {
+                            saveSpawnPos = 0;
+                            i = 0;
+                        } else { saveSpawnPos++; }
 
-                    if (enemyAmount >= maxEnemyAmount) { return; }
+                        if (enemyAmount >= maxEnemyAmount) { return; }
 
-                    enemyAmount++;
+                        enemyAmount++;
 
-                    // get the spawn location
-                    GameObject spawn = enemySpawns[i];
-                    // create a new enemy gameobject
-                    _ = Instantiate(enemyPrefab, spawn.transform.position, spawn.transform.rotation);
+                        // get the spawn location
+                        GameObject spawn = enemySpawns[i];
+
+                        // create a new enemy gameobject
+                        _ = Instantiate(enemyPrefab, spawn.transform.position, spawn.transform.rotation);
+                    }
                 }
+            } else {
+                maxEnemyAmount = maxMaxEnemyAmount;
             }
         }
     }
@@ -138,5 +154,7 @@ public class EnemyManager : MonoBehaviour
     public int getEnemySpawnRate() { return maxEnemyAmount; }
 
     public void setEnemySpawnRate(int newMaxEnemyAmount) { maxEnemyAmount += newMaxEnemyAmount; }
+
+    public int getEnemyMaxMaxAmount() { return maxMaxEnemyAmount; }
     // ================================================================================
 }

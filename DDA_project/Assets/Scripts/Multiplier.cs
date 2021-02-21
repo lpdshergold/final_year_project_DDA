@@ -32,7 +32,7 @@ public class Multiplier : MonoBehaviour
     }
 
     public void basicLevelUp() {
-        Debug.Log("Getting to basic multiplier");
+        Debug.Log("Static Difficulty: running static mutliplier increase");
         basicMultiplierCal();
     }
 
@@ -129,7 +129,7 @@ public class Multiplier : MonoBehaviour
 
         dm.setEnemyDamage(tempEDamage);
 
-        em.setEnemySpawnRate(1);
+        UpdateEnemySpawnAmount(1);
 
         updateManagers("enemy");
     }
@@ -147,8 +147,6 @@ public class Multiplier : MonoBehaviour
             }
         }
 
-        Debug.Log("enemy move speed: " + dm.getEnemyMoveSpeed());
-
         updateManagers("");
     }
 
@@ -165,9 +163,21 @@ public class Multiplier : MonoBehaviour
     }
 
     public void UpdateEnemySpawnAmount(int amount) {
-        em.setEnemySpawnRate(amount);
+        int tempSpawnAmount = em.getEnemySpawnRate();
+        int tempMaxSpawnAmount = em.getEnemyMaxMaxAmount();
+        int tempAmount = tempSpawnAmount + amount;
 
-        updateManagers("");
+        if(tempAmount <= tempMaxSpawnAmount) {
+            em.setEnemySpawnRate(amount);
+
+            updateManagers("");
+
+        } else if (tempSpawnAmount < tempMaxSpawnAmount && tempAmount > tempMaxSpawnAmount) {
+            em.setEnemySpawnRate(em.getEnemyMaxMaxAmount());
+            
+            updateManagers("");
+
+        } else { return; }
     }
 
     private void updateManagers(string updatePlayer = "") {

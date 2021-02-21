@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour
 
     private PlayerLevel pl;
     private Rulebook rulebook;
+    private WeightSystem ws;
 
     private Rigidbody2D rb;
     private Vector2 playerDirection;
@@ -23,12 +24,14 @@ public class Enemy : MonoBehaviour
     private int maxExpToGive = 20;
 
     private bool isCautious = false;
-    private bool isFollowingPlayer = false;
+    public bool isFollowingPlayer = false;
     private bool stopFollowingPlayer = true;
 
     private int playerTriggeredEnemy = 0;
     private float cautionTimer = 0.0f;
     private float stopFollowingPlayerTimer = 0.0f;
+
+    public int hitPlayerAmount = 0;
 
     private void Awake() {
         // get the GameManager script component
@@ -36,6 +39,7 @@ public class Enemy : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         pl = GameObject.Find("PlayerManager").GetComponent<PlayerLevel>();
         rulebook = GameObject.Find("DifficultyManager").GetComponent<Rulebook>();
+        ws = GameObject.Find("DifficultyManager").GetComponent<WeightSystem>();
     }
 
     void Start() {
@@ -56,15 +60,15 @@ public class Enemy : MonoBehaviour
     }
 
     private void FixedUpdate() {
-        //if (isFollowingPlayer) {
-        //    Debug.Log("Is Following");
-        //    StopFollowingPlayerTimer();
-        //    rulebook.updateRulebook = true;
+        if (isFollowingPlayer) {
+            //StopFollowingPlayerTimer();
+            rulebook.updateRulebook = true;
             MoveEnemy();
-       // } else if (isCautious) {
-       //     Debug.Log("Is cautious");
-       //     FollowPlayerTimer();
-       // }
+        } 
+        //else if (isCautious) {
+        //    Debug.Log("Is cautious");
+        //    FollowPlayerTimer();
+        //}
     }
 
     private void MoveEnemy() {
@@ -76,14 +80,15 @@ public class Enemy : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
-        if (collision.gameObject.tag == "Player") {
-            playerTriggeredEnemy++;
+        if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Bullet") {
+            isFollowingPlayer = true;
+/*            playerTriggeredEnemy++;
             if (playerTriggeredEnemy > 1) {
                 isFollowingPlayer = true;
                 stopFollowingPlayer = false;
             } else {
                 isCautious = true;
-            }
+            }*/
         }
     }
 
@@ -99,6 +104,8 @@ public class Enemy : MonoBehaviour
             isFollowingPlayer = true;
             eHealth -= playerAtkDamage;
             em.updatePlayerHits();
+        } else if (collision.gameObject.tag == "Player") {
+            hitPlayerAmount++;
         }
     }
 
@@ -136,6 +143,8 @@ public class Enemy : MonoBehaviour
             em.enemyAmount--;
             EnemyExperience();
             em.updateRuleBookEnemiesKilled();
+            ws.setIndividualEnemyHitList(hitPlayerAmount);
+            ws.setDeadEnemiesSeenPlayer();
             rulebook.updateRulebook = false;
             Destroy(gameObject);
         }
