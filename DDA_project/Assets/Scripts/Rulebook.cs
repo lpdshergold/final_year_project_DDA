@@ -15,7 +15,8 @@ public class Rulebook : MonoBehaviour
     private bool doOnce = false;
     private bool passOncePerLevel = false;
 
-    private string weightLvl = "";
+    private string playerWeightLvl = "";
+    private string enemyWeightLvl = "";
 
     private int enemiesKilled = 0;
     private int enemyDamageHits = 0;
@@ -47,7 +48,6 @@ public class Rulebook : MonoBehaviour
             doOnce = true;
         }
 
-        // add && updateRulebook if enemy sight is used
         if(isDDAEnabled && updateRulebook) {
             // death checks
             PlayerTooManyDeaths();
@@ -69,10 +69,11 @@ public class Rulebook : MonoBehaviour
             ResetVaraibles();
         }
 
-        if(levelup && isDDAEnabled && weightLvl != "") {
+        if(levelup && isDDAEnabled && (playerWeightLvl != "" && enemyWeightLvl != "")) {
             levelup = false;
-            multiplier.ddaLevelup(weightLvl);
-            weightLvl = "";
+            multiplier.ddaLevelup(playerWeightLvl, enemyWeightLvl);
+            playerWeightLvl = "";
+
         } else if (levelup && !isDDAEnabled) {
             levelup = false;
             multiplier.basicLevelUp();
@@ -123,8 +124,6 @@ public class Rulebook : MonoBehaviour
                 multiplier.UpdateEnemyDamage(-10);
             } else if (rulebookPlayerDeath == 2) {
                 multiplier.UpdateEnemyDamage(-5);
-            } else {
-                Debug.Log("No action needed with amount of player deaths");
             }
 
             rulebookPlayerDeath = 0;
@@ -201,7 +200,7 @@ public class Rulebook : MonoBehaviour
 
     public void setLevelup(bool plevel) { levelup = plevel; }
 
-    public void setWeightLvl(string weight) { weightLvl = weight; }
+    public void setWeightLvl(string playerWeighting, string enemyWeighting) { playerWeightLvl = playerWeighting; enemyWeightLvl = enemyWeighting; }
 
     public void updateEnemiesKilled() { enemiesKilled++; rulebookEnemiesKilled++; }
 

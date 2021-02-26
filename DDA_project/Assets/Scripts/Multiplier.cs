@@ -36,12 +36,19 @@ public class Multiplier : MonoBehaviour
         basicMultiplierCal();
     }
 
-    public void ddaLevelup(string pWeight) {
-        if (pWeight != "") {
-            Debug.Log("in ddaLevelUp: " + pWeight);
+    public void ddaLevelup(string pWeight, string eWeight) {
+        if (pWeight != "" || pWeight != "none") {
+            Debug.Log("Player multiplier increase: " + pWeight);
             playerMultiplierCal(pWeight);
         } else {
-            Debug.Log("No weight passed to playerMulCal");
+            Debug.Log("No player multiplier increase");
+        }
+
+        if(eWeight != "" || eWeight != "none") {
+            Debug.Log("Enemy multiplier increase: " + eWeight);
+            enemyMultiplayerCal(eWeight);
+        } else {
+            Debug.Log("No enemy multiplier increase");
         }
     }
 
@@ -100,6 +107,10 @@ public class Multiplier : MonoBehaviour
         }
 
         updateManagers("all");
+    }
+
+    private void enemyMultiplayerCal(string mulWeight = "") {
+        Debug.Log("getting to enemyMultiplayerCal");
     }
 
     public void UpdateEnemyDamageHealthAmount() {

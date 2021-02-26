@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Data;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -46,6 +43,11 @@ public class PlayerManager : MonoBehaviour
         if(!getPlayer) {
             getPlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         }
+
+        if(playerSpawn == null) {
+            Debug.Log("Getting player spawn location");
+            getPlayerSpawnLocation();
+        }
     }
 
     private void Init() {
@@ -56,10 +58,11 @@ public class PlayerManager : MonoBehaviour
 
         startPlayerHealth = playerHealth;
 
-        Debug.Log("P health: " + playerHealth);
-        Debug.Log("P damage: " + playerDamage);
-
         spawnPlayer();
+    }
+
+    private void getPlayerSpawnLocation() {
+        playerSpawn = GameObject.FindGameObjectWithTag("PlayerSpawn").transform;
     }
 
     public void updatePlayerDetails(string whatToUpdate = "") {
@@ -68,7 +71,6 @@ public class PlayerManager : MonoBehaviour
             playerMaxHealth = dm.getPlayerHealth();
             playerDamage = dm.getPlayerDamage();
         } else if(whatToUpdate == "enemy") {
-            Debug.Log("enemy update");
             enemyDamage = dm.getEnemyDamage();
         } else if (whatToUpdate == "all") {
             playerHealth = dm.getPlayerHealth();
@@ -76,7 +78,7 @@ public class PlayerManager : MonoBehaviour
             playerDamage = dm.getPlayerDamage();
             enemyDamage = dm.getEnemyDamage();
         } else {
-            Debug.Log("Didn't need updating = PlayerManager");
+            return;
         }
 
         getPlayer.updateDetails();

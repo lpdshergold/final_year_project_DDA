@@ -1,10 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq.Expressions;
-using System.Security.Cryptography;
-using UnityEditor.UIElements;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
