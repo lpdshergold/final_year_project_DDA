@@ -84,6 +84,7 @@ public class Multiplier : MonoBehaviour
 
             int tempHealth = (int)(pHealth * smallWeightMultiplier);
             dm.setPlayerHealth(tempHealth);
+            pm.setStartPlayerHealth(tempHealth);
 
             int tempDamage = (int)(pDamage * smallWeightMultiplier);
             dm.setPlayerDamage(tempDamage);
@@ -92,6 +93,7 @@ public class Multiplier : MonoBehaviour
 
             int tempHealth = (int)(pHealth * mediumWeightMultiplier);
             dm.setPlayerHealth(tempHealth);
+            pm.setStartPlayerHealth(tempHealth);
 
             int tempDamage = (int)(pDamage * mediumWeightMultiplier);
             dm.setPlayerDamage(tempDamage);
@@ -100,6 +102,7 @@ public class Multiplier : MonoBehaviour
 
             int tempHealth = (int)(pHealth * highWeightMultiplier);
             dm.setPlayerHealth(tempHealth);
+            pm.setStartPlayerHealth(tempHealth);
 
             int tempDamage = (int)(pDamage * highWeightMultiplier);
             dm.setPlayerDamage(tempDamage);
@@ -110,7 +113,54 @@ public class Multiplier : MonoBehaviour
     }
 
     private void enemyMultiplayerCal(string mulWeight = "") {
-        Debug.Log("getting to enemyMultiplayerCal");
+        int eHealth = dm.getEnemyHealth();
+        int eDamage = dm.getEnemyDamage();
+
+        if(mulWeight == "") {
+            return;
+
+        } else if(mulWeight == "small") {
+
+            int tempHealth = (int)(eHealth * smallWeightMultiplier);
+            dm.setEnemyHealth(tempHealth);
+
+            int tempDamage = (int)(eDamage * smallWeightMultiplier);
+
+            if(tempDamage == eDamage) {
+                tempDamage++;
+            }
+
+            dm.setEnemyDamage(tempDamage);
+
+        } else if(mulWeight == "medium") {
+
+            int tempHealth = (int)(eHealth * mediumWeightMultiplier);
+            dm.setEnemyHealth(tempHealth);
+
+            int tempDamage = (int)(eDamage * mediumWeightMultiplier);
+
+            if(tempDamage == eDamage) {
+                tempDamage++;
+            }
+
+            dm.setEnemyDamage(tempDamage);
+
+        } else if(mulWeight == "high") {
+
+            int tempHealth = (int)(eHealth * highWeightMultiplier);
+            dm.setEnemyHealth(tempHealth);
+
+            int tempDamage = (int)(eDamage * highWeightMultiplier);
+
+            if(tempDamage == eDamage) {
+                tempDamage++;
+            }
+
+            dm.setEnemyDamage(tempDamage);
+
+        }
+
+        updateManagers("all");
     }
 
     public void UpdateEnemyDamageHealthAmount() {

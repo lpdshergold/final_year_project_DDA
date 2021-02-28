@@ -90,6 +90,7 @@ public class Rulebook : MonoBehaviour
 
     // Rulebook scenarios ===================================================================================
 
+    // scenario 1
     // check if the player kills too many enemies before dying - update enemies damage + health + ememy amount
     private int playerDeathCheck = 0;
     private int playerKillsDeathCounter = 0;
@@ -100,6 +101,7 @@ public class Rulebook : MonoBehaviour
                 rulebookEnemiesKilled = 0;
 
                 multiplier.UpdateEnemyDamageHealthAmount();
+                Debug.Log("RB S1: Updating enemy damage and health");
 
             } else {
                 playerKillsDeathCounter = rulebookEnemiesKilled;
@@ -112,6 +114,7 @@ public class Rulebook : MonoBehaviour
         }
     }
 
+    // scenario 2
     // if the player dies too much, reduce the enemy damage + move speed
     private float playerDeathTimer = 0.0f;
     private void PlayerTooManyDeaths() {
@@ -119,10 +122,13 @@ public class Rulebook : MonoBehaviour
 
         if (playerDeathTimer >= 30.0 || rulebookPlayerDeath > 4) {
             if (rulebookPlayerDeath >= 4) {
+                Debug.Log("RB S2: Reducing enemy damage: High");
                 multiplier.UpdateEnemyDamage(-15);
             } else if (rulebookPlayerDeath == 3) {
+                Debug.Log("RB S2: Reducing enemy damage: Medium");
                 multiplier.UpdateEnemyDamage(-10);
             } else if (rulebookPlayerDeath == 2) {
+                Debug.Log("RB S2: Reducing enemy damage: Low");
                 multiplier.UpdateEnemyDamage(-5);
             }
 
@@ -131,6 +137,7 @@ public class Rulebook : MonoBehaviour
         }
     }
 
+    // scenario 3
     // check to see if the enemy hasn't hit the player over a period of time - increase enemy speed + enemy amount
     private float playerHitTimer = 0.0f;
     private int enemyHitPlayer = 0;
@@ -140,6 +147,7 @@ public class Rulebook : MonoBehaviour
         if(enemyHitPlayer == enemyDamageHits) {
             if(playerHitTimer >= 15.0f) {
                 playerHitTimer = 0.0f;
+                Debug.Log("RB S3: Increase enemy amount and speed");
                 multiplier.TimerUpdateEnemySpeed(0.1f);
             }
         } else {
@@ -148,6 +156,7 @@ public class Rulebook : MonoBehaviour
         }
     }
 
+    // scenario 4
     // check to see if the player is hit a specific amount in under 5 seconds and reduce the enemy speed
     private float tooManyPlayerHitsTimer = 0.0f;
     private int isPlayerHitTooMuch = 0;
@@ -159,11 +168,12 @@ public class Rulebook : MonoBehaviour
             isPlayerHitTooMuch = 0;
             rulebookEnemyDamageHits = 0;
 
+            Debug.Log("RB S4: Reduce enemy speed");
             multiplier.TimerUpdateEnemySpeed(-0.25f);
         } else {
             isPlayerHitTooMuch = rulebookEnemyDamageHits;
 
-            if (tooManyPlayerHitsTimer >= 5.0f) {
+            if (tooManyPlayerHitsTimer >= 10.0f) {
                 tooManyPlayerHitsTimer = 0.0f;
                 isPlayerHitTooMuch = 0;
                 rulebookEnemyDamageHits = 0;
@@ -171,6 +181,7 @@ public class Rulebook : MonoBehaviour
         }
     }
 
+    // scenario 5
     // if the enemies don't do a certain amount of damage over a period of time - increase enemy amount
     private float notEnoughEnemyDamageTimer = 0.0f;
     private void NotEnoughEnemyDamage() {
@@ -180,10 +191,13 @@ public class Rulebook : MonoBehaviour
         if(notEnoughEnemyDamageTimer >= 30.0f) {
 
             if(rulebookIsPlayerNotHitEnough <= 1) {
+                Debug.Log("RB S5: Increase enemy amount: High");
                 multiplier.UpdateEnemySpawnAmount(3);
             } else if (rulebookIsPlayerNotHitEnough <= 3) {
+                Debug.Log("RB S5: Increase enemy amount: Medium");
                 multiplier.UpdateEnemySpawnAmount(2);
             } else if (rulebookIsPlayerNotHitEnough <= 5) {
+                Debug.Log("RB S5: Increase enemy amount: Low");
                 multiplier.UpdateEnemySpawnAmount(1);
             }
 

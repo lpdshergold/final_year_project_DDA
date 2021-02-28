@@ -13,11 +13,11 @@ public class PlayerManager : MonoBehaviour
     private Rulebook rulebook;
 
     private int startPlayerHealth;
-    private int playerHealth = 100;
+    private int playerHealth;
     private float playerMoveSpeed = 3.0f;
     private int playerMaxHealth;
     private int playerLevel = 1;
-    private int playerDamage = 100;
+    private int playerDamage;
     private int playerExperiencePoints = 0;
     private bool isPlayerDead = false;
     public int enemyDamage;
@@ -106,6 +106,8 @@ public class PlayerManager : MonoBehaviour
     public int getPlayerHealth() { return playerHealth; }
 
     public void setPlayerHealth(int health) { playerHealth = health; }
+
+    public void setStartPlayerHealth(int health) { startPlayerHealth = health; }
 
     public int getPlayerMaxHealth() { return playerMaxHealth; }
 

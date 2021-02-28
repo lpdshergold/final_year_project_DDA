@@ -140,13 +140,11 @@ public class WeightSystem : MonoBehaviour {
     private void playerDeathWeighting() { // player weighting
         if(playerLvl <= 3) {
             if(playerDeaths == 0) {
-                enemyWeighting += 3;
+                return;
             } else if(playerDeaths == 1) {
                 playerWeighting += 1;
-                enemyWeighting += 2;
             } else if(playerDeaths == 2) {
                 playerWeighting += 2;
-                enemyWeighting += 1;
             } else if(playerDeaths == 3) {
                 playerWeighting += 3;
             } else if(playerDeaths > 3) {
@@ -158,12 +156,15 @@ public class WeightSystem : MonoBehaviour {
 
             if(averagePlayerDeaths == 0) {
                 enemyWeighting += 3;
+                Debug.Log("playerDeathWeighting: High");
             } else if(averagePlayerDeaths == 1) {
                 playerWeighting += 1;
                 enemyWeighting += 2;
+                Debug.Log("playerDeathWeighting: Medium");
             } else if(averagePlayerDeaths == 2) {
                 playerWeighting += 2;
                 enemyWeighting += 1;
+                Debug.Log("playerDeathWeighting: Low");
             } else if(averagePlayerDeaths == 3) {
                 playerWeighting += 3;
             } else if(averagePlayerDeaths > 3) {
@@ -249,12 +250,12 @@ public class WeightSystem : MonoBehaviour {
         int totalEnemies = enemySeenPlayer + enemyNotSeenPlayer;
         double getPercentage = (enemySeenPlayer * 100.0) / totalEnemies;
 
-        if (getPercentage < 42.5) {
+        if (getPercentage < 40.0) {
             enemyWeighting += 3;
-        } else if (getPercentage >= 42.5 && getPercentage < 45.0) {
+        } else if (getPercentage >= 40.0 && getPercentage < 45.0) {
             enemyWeighting += 2;
-        } else if (getPercentage >= 45.0 && getPercentage < 47.0) {
-            enemyWeighting += 1; 
+        } else if (getPercentage >= 45.0 && getPercentage < 50.0) {
+            enemyWeighting += 1;
         }
     }
 
@@ -295,11 +296,11 @@ public class WeightSystem : MonoBehaviour {
         if(readyForAverage) {
             tempAverage = Convert.ToDouble(enemyDamage) / enemyCount;
 
-            if(tempAverage <= 0.2) {
+            if(tempAverage <= 0.15) {
                 enemyWeighting += 3;
-            } else if (tempAverage > 0.2 && tempAverage <= 0.3) {
+            } else if (tempAverage > 0.15 && tempAverage <= 0.3) {
                 enemyWeighting += 2;
-            } else if (tempAverage > 0.3 && tempAverage <= 0.4) {
+            } else if (tempAverage > 0.3 && tempAverage <= 0.45) {
                 enemyWeighting += 1;
             }
         }

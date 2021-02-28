@@ -25,12 +25,10 @@ public class InitGame : MonoBehaviour
     private const int easyEnemyDamage = 15;
     private const int mediumEnemyDamage = 20;
     private const int hardEnemyDamage = 25;    
-    private const int easyEnemySpawnAmount = 10;
-    private const int mediumEnemySpawnAmount = 15;
-    private const int hardEnemySpawnAmount = 20;
+    private const int enemySpawnAmount = 10;
     private const float easyEnemyMoveSpeed = 2.0f;
-    private const float mediumEnemyMoveSpeed = 2.25f;
-    private const float hardEnemyMoveSpeed = 2.5f;
+    private const float mediumEnemyMoveSpeed = 2.15f;
+    private const float hardEnemyMoveSpeed = 2.3f;
 
     private bool isDDAEnabled = false;
     private bool sendOnce = false;
@@ -54,7 +52,7 @@ public class InitGame : MonoBehaviour
             dm.setEnemyHealth(easyEnemyHealth);
             dm.setEnemyDamage(easyEnemyDamage);
             dm.setEnemyMoveSpeed(easyEnemyMoveSpeed);
-            dm.setEnemySpawnAmount(easyEnemySpawnAmount);
+            dm.setEnemySpawnAmount(enemySpawnAmount);
             dm.setDDAEnabled(isDDAEnabled);
             dm.updateDDAElsewhere(isDDAEnabled);
             dm.setGameDifficulty("easy");
@@ -65,7 +63,7 @@ public class InitGame : MonoBehaviour
             dm.setEnemyHealth(mediumEnemyHealth);
             dm.setEnemyDamage(mediumEnemyDamage);
             dm.setEnemyMoveSpeed(mediumEnemyMoveSpeed);
-            dm.setEnemySpawnAmount(mediumEnemySpawnAmount);
+            dm.setEnemySpawnAmount(enemySpawnAmount);
             dm.setDDAEnabled(isDDAEnabled);
             dm.updateDDAElsewhere(isDDAEnabled);
             dm.setGameDifficulty("medium");
@@ -76,7 +74,7 @@ public class InitGame : MonoBehaviour
             dm.setEnemyHealth(hardEnemyHealth);
             dm.setEnemyDamage(hardEnemyDamage);
             dm.setEnemyMoveSpeed(hardEnemyMoveSpeed);
-            dm.setEnemySpawnAmount(hardEnemySpawnAmount);
+            dm.setEnemySpawnAmount(enemySpawnAmount);
             dm.setDDAEnabled(isDDAEnabled);
             dm.updateDDAElsewhere(isDDAEnabled);
             dm.setGameDifficulty("hard");
