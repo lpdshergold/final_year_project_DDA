@@ -45,7 +45,6 @@ public class PlayerManager : MonoBehaviour
         }
 
         if(playerSpawn == null) {
-            Debug.Log("Getting player spawn location");
             getPlayerSpawnLocation();
         }
     }

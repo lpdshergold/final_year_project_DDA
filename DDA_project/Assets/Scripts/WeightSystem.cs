@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.Jobs;
 
 public class WeightSystem : MonoBehaviour {
     private EnemyManager em;
@@ -26,6 +28,7 @@ public class WeightSystem : MonoBehaviour {
     private List<int> allPlayerDamageHits = new List<int>();
     private List<int> allEnemyDamageHits = new List<int>();
     private List<KeyValuePair<int, int>> allIndividualEnemyHitsOnPlayer = new List<KeyValuePair<int, int>>();
+    private List<KeyValuePair<int, bool>> checkEnemyMovementStatus = new List<KeyValuePair<int, bool>>();
 
     void Start() {
         rulebook = GameObject.Find("DifficultyManager").GetComponent<Rulebook>();
@@ -66,7 +69,6 @@ public class WeightSystem : MonoBehaviour {
         playerDamageHitsWeighting();
 
         // enemy weighting
-        enemiesNotSeenPlayer();
         setAliveEnemyHits();
         enemyHitPlayerWeighting();
         enemySeenPlayerWeighting();
@@ -124,16 +126,12 @@ public class WeightSystem : MonoBehaviour {
             int averagePlayerHealth = averageOfLastThreeLevels(allPlayerHealth);
 
             if(averagePlayerHealth > (Convert.ToDouble(playerMaxHealth) / 100.0) * 70.0) {
-                // Debug.Log("Average Player Health: " + averagePlayerHealth + " No PlayerHealthWeight added");
                 return;
             } else if(averagePlayerHealth > (Convert.ToDouble(playerMaxHealth / 100.0) * 50.0) && Convert.ToDouble(averagePlayerHealth) <= (Convert.ToDouble(playerMaxHealth / 100.0) * 70.0)) {
-                // Debug.Log("Average Player Health: " + averagePlayerHealth + " PlayerHealthWeight + 1");
                 playerWeighting += 1;
             } else if(averagePlayerHealth > (Convert.ToDouble(playerMaxHealth / 100.0) * 30.0) && Convert.ToDouble(averagePlayerHealth) <= (Convert.ToDouble(playerMaxHealth / 100.0) * 50.0)) {
-                // Debug.Log("Average Player Health: " + averagePlayerHealth + " PlayerHealthWeight + 2");
                 playerWeighting += 2;
             } else if(averagePlayerHealth <= Convert.ToDouble(playerMaxHealth / 100.0) * 30.0) {
-                // Debug.Log("Average Player Health: " + averagePlayerHealth + " PlayerHealthWeight + 3");
                 playerWeighting += 3;
             }
         }
@@ -142,11 +140,13 @@ public class WeightSystem : MonoBehaviour {
     private void playerDeathWeighting() { // player weighting
         if(playerLvl <= 3) {
             if(playerDeaths == 0) {
-                return;
+                enemyWeighting += 3;
             } else if(playerDeaths == 1) {
                 playerWeighting += 1;
+                enemyWeighting += 2;
             } else if(playerDeaths == 2) {
                 playerWeighting += 2;
+                enemyWeighting += 1;
             } else if(playerDeaths == 3) {
                 playerWeighting += 3;
             } else if(playerDeaths > 3) {
@@ -157,19 +157,16 @@ public class WeightSystem : MonoBehaviour {
             int averagePlayerDeaths = averageOfLastThreeLevels(allPlayerDeaths);
 
             if(averagePlayerDeaths == 0) {
-                // Debug.Log("Average Player Deaths: " + averagePlayerDeaths + " No PlayerDeathWeight added");
-                return;
+                enemyWeighting += 3;
             } else if(averagePlayerDeaths == 1) {
-                // Debug.Log("Average Player Deaths: " + averagePlayerDeaths + " PlayerDeathWeight added + 1");
                 playerWeighting += 1;
+                enemyWeighting += 2;
             } else if(averagePlayerDeaths == 2) {
-                // Debug.Log("Average Player Deaths: " + averagePlayerDeaths + " PlayerDeathWeight added + 2");
                 playerWeighting += 2;
+                enemyWeighting += 1;
             } else if(averagePlayerDeaths == 3) {
-                // Debug.Log("Average Player Deaths: " + averagePlayerDeaths + " PlayerDeathWeight added + 3");
                 playerWeighting += 3;
             } else if(averagePlayerDeaths > 3) {
-                // Debug.Log("Average Player Deaths: " + averagePlayerDeaths + " PlayerDeathWeight added + 3");
                 playerWeighting += 4;
             }
         }
@@ -183,16 +180,12 @@ public class WeightSystem : MonoBehaviour {
             double twentyFiveDamageCheck = Convert.ToDouble(playerDamageHits / 100.0) * 25.0;
 
             if(Convert.ToDouble(enemyDamageHits) > seventyFiveDamageCheck) {
-                // Debug.Log("playerDamageHitsWeighting: + 3 weight given");
                 playerWeighting += 3;
             } else if(Convert.ToDouble(enemyDamageHits) <= seventyFiveDamageCheck && Convert.ToDouble(enemyDamageHits) > FiftyDamageCheck) {
-                // Debug.Log("playerDamageHitsWeighting: + 2 weight given");
                 playerWeighting += 2;
             } else if(Convert.ToDouble(enemyDamageHits) <= FiftyDamageCheck && Convert.ToDouble(enemyDamageHits) > twentyFiveDamageCheck) {
-                // Debug.Log("playerDamageHitsWeighting: + 1 weight given");
                 playerWeighting += 1;
             } else if(Convert.ToDouble(enemyDamageHits) <= twentyFiveDamageCheck) {
-                // Debug.Log("playerDamageHitsWeighting: no weight given");
                 return;
             }
 
@@ -206,16 +199,12 @@ public class WeightSystem : MonoBehaviour {
             double averageFifteenDamageCheck = Convert.ToDouble(averagePlayerDamageHits / 100.0) * 15.0;
 
             if(averageEnemyDamageHits < averageFifteenDamageCheck) {
-                // Debug.Log("playerDamageHitsWeighting: no weight given");
                 return;
             } else if(averageEnemyDamageHits >= averageFifteenDamageCheck && averageEnemyDamageHits < averageTwentyFiveDamageCheck) {
-                // Debug.Log("playerDamageHitsWeighting: + 1 weight given");
                 playerWeighting += 1;
             } else if(averageEnemyDamageHits >= averageTwentyFiveDamageCheck && averageEnemyDamageHits < averageThirtyFiveFiveDamageCheck) {
-                // Debug.Log("playerDamageHitsWeighting: + 2 weight given");
                 playerWeighting += 2;
             } else if(averageEnemyDamageHits >= averageThirtyFiveFiveDamageCheck) {
-                // Debug.Log("playerDamageHitsWeighting: + 3 weight given");
                 playerWeighting += 3;
             }
         }
@@ -223,17 +212,98 @@ public class WeightSystem : MonoBehaviour {
 
     // one to check if the enemies have seen the player - or encountered the player
     // one to check the hits on player from dead enemies - maybe also look at ones that have been triggered and hit the player as well for this
-    // another check will be needed
+    // using the player death for the third weighting - may change
 
     private void enemySeenPlayerWeighting() {
+        List<KeyValuePair<int, bool>> tempList = checkEnemyMovementStatus;
 
+        int enemySeenPlayer = 0, enemyNotSeenPlayer = 0, tempPlayerLvl = 0, enemyLvlInList = 0;
+
+        if(playerLvl < 4) {
+            foreach(KeyValuePair<int, bool> enemy in tempList) {
+                if(enemy.Value == false) {
+                    enemyNotSeenPlayer++;
+                } else {
+                    enemySeenPlayer++;
+                }
+            }
+        } else {
+            foreach(KeyValuePair<int, bool> enemy in tempList) {
+                if(enemyLvlInList != enemy.Key) {
+                    enemyLvlInList = enemy.Key;
+                    tempPlayerLvl++;
+                }
+
+                if(tempPlayerLvl > 3) {
+                    break;
+                }
+
+                if(enemy.Value == false) {
+                    enemyNotSeenPlayer++;
+                } else {
+                    enemySeenPlayer++;
+                }
+            }
+        }
+
+        int totalEnemies = enemySeenPlayer + enemyNotSeenPlayer;
+        double getPercentage = (enemySeenPlayer * 100.0) / totalEnemies;
+
+        if (getPercentage < 42.5) {
+            enemyWeighting += 3;
+        } else if (getPercentage >= 42.5 && getPercentage < 45.0) {
+            enemyWeighting += 2;
+        } else if (getPercentage >= 45.0 && getPercentage < 47.0) {
+            enemyWeighting += 1; 
+        }
     }
 
     private void enemyHitPlayerWeighting() {
+        List<KeyValuePair<int, int>> tempList = allIndividualEnemyHitsOnPlayer;
 
+        int enemyCount = 0, enemyDamage = 0, tempPlayerLvl = 0, enemyLvlInList = 0;
+        bool readyForAverage = false;
+        double tempAverage = 0.0;
+
+        if(playerLvl < 4) {
+            foreach(KeyValuePair<int, int> enemy in tempList) {
+                enemyCount++;
+                enemyDamage += enemy.Value;
+            }
+
+            readyForAverage = true;
+
+        } else {
+            foreach(KeyValuePair<int, int> enemy in tempList) {
+                if(enemyLvlInList != enemy.Key) {
+                    enemyLvlInList = enemy.Key;
+                    tempPlayerLvl++;
+                }
+
+                if (tempPlayerLvl > 3) {
+                    break;
+                }
+                
+                enemyCount++;
+                enemyDamage += enemy.Value;
+            }
+
+            readyForAverage = true;
+        
+        }
+
+        if(readyForAverage) {
+            tempAverage = Convert.ToDouble(enemyDamage) / enemyCount;
+
+            if(tempAverage <= 0.2) {
+                enemyWeighting += 3;
+            } else if (tempAverage > 0.2 && tempAverage <= 0.3) {
+                enemyWeighting += 2;
+            } else if (tempAverage > 0.3 && tempAverage <= 0.4) {
+                enemyWeighting += 1;
+            }
+        }
     }
-
-    private List<KeyValuePair<int, bool>> checkEnemyMovementStatus = new List<KeyValuePair<int, bool>>();
 
     // check enemies that have not seen the player and check enemies that are alive and have seen the player
     private void enemiesNotSeenPlayer() {
