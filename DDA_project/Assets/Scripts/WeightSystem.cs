@@ -81,7 +81,6 @@ public class WeightSystem : MonoBehaviour {
     private void weighting() {
 
         if(playerWeighting == 0) {
-            Debug.Log("WS: No playerWeighting sent back to Rulebook");
             pWeighting = "none";
         } else if(playerWeighting > 0 && playerWeighting <= 3) {
             pWeighting = "small";
@@ -92,7 +91,6 @@ public class WeightSystem : MonoBehaviour {
         }
 
         if(enemyWeighting == 0) {
-            Debug.Log("WS: No enemyWeighting sent back to Rulebook");
             eWeighting = "none";
         } else if(enemyWeighting > 0 && enemyWeighting <= 3) {
             eWeighting = "small";

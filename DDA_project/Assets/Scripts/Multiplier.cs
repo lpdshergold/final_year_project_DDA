@@ -57,6 +57,7 @@ public class Multiplier : MonoBehaviour
         int pDamage = dm.getPlayerDamage();
         int eHealth = dm.getEnemyHealth();
         int eDamage = dm.getEnemyDamage();
+        int eSpawn = dm.getEnemySpawnAmount();
 
         int tempHealth = (int)(pHealth * basicMultiplier);
         dm.setPlayerHealth(tempHealth);
@@ -70,44 +71,66 @@ public class Multiplier : MonoBehaviour
         int tempEDamage = (int)(eDamage * basicMultiplier);
         dm.setEnemyDamage(tempEDamage);
 
+        dm.setEnemySpawnAmount(eSpawn + 1);
+
+        Debug.Log("Previous Player Health: " + pHealth + ", New Player Health: " + tempHealth);
+        Debug.Log("Previous Player Damage: " + pDamage + ", New Player Damage: " + tempDamage);
+        Debug.Log("Previous Enemy Health: " + eHealth + ", New Enemy Health: " + tempEHealth);
+        Debug.Log("Previous Enemy Damage: " + eDamage + ", New Enemy Damage: " + tempEDamage);
+        Debug.Log("Previous Enemy Spawn Amount: " + eSpawn + ", New Enemy Spawn Amount: " + (eSpawn + 1));
+
         updateManagers("all"); 
     }
 
     private void playerMultiplierCal(string mulWeight = "") {
         int pHealth = dm.getPlayerHealth();
         int pDamage = dm.getPlayerDamage();
+        int tempHealth = 0;
+        int tempDamage = 0;
 
         if (mulWeight == "") {
             return;
 
         } else if (mulWeight == "small") {
 
-            int tempHealth = (int)(pHealth * smallWeightMultiplier);
+            tempHealth = (int)(pHealth * smallWeightMultiplier);
             dm.setPlayerHealth(tempHealth);
             pm.setStartPlayerHealth(tempHealth);
 
-            int tempDamage = (int)(pDamage * smallWeightMultiplier);
+            tempDamage = (int)(pDamage * smallWeightMultiplier);
             dm.setPlayerDamage(tempDamage);
 
         } else if (mulWeight == "medium") {
 
-            int tempHealth = (int)(pHealth * mediumWeightMultiplier);
+            tempHealth = (int)(pHealth * mediumWeightMultiplier);
             dm.setPlayerHealth(tempHealth);
             pm.setStartPlayerHealth(tempHealth);
 
-            int tempDamage = (int)(pDamage * mediumWeightMultiplier);
+            tempDamage = (int)(pDamage * mediumWeightMultiplier);
             dm.setPlayerDamage(tempDamage);
 
         } else if(mulWeight == "high") {
 
-            int tempHealth = (int)(pHealth * highWeightMultiplier);
+            tempHealth = (int)(pHealth * highWeightMultiplier);
             dm.setPlayerHealth(tempHealth);
             pm.setStartPlayerHealth(tempHealth);
 
-            int tempDamage = (int)(pDamage * highWeightMultiplier);
+            tempDamage = (int)(pDamage * highWeightMultiplier);
             dm.setPlayerDamage(tempDamage);
 
         }
+        
+        if (tempHealth < pHealth && tempDamage < pDamage) {
+            tempHealth = pHealth;
+            tempDamage = pDamage;
+        } else if (tempHealth < pHealth) {
+            tempHealth = pHealth;
+        } else if (tempDamage < pDamage) {
+            tempDamage = pDamage;
+        }
+
+        Debug.Log("Previous Player Health: " + pHealth + ", New Player Health: " + tempHealth);
+        Debug.Log("Previous Player Damage: " + pDamage + ", New Player Damage: " + tempDamage);
 
         updateManagers("all");
     }
@@ -115,50 +138,80 @@ public class Multiplier : MonoBehaviour
     private void enemyMultiplayerCal(string mulWeight = "") {
         int eHealth = dm.getEnemyHealth();
         int eDamage = dm.getEnemyDamage();
+        int eSpawn = dm.getEnemySpawnAmount();
+        int tempHealth = 0;
+        int tempDamage = 0;
+        int tempSpawnAmount = 0;
 
         if(mulWeight == "") {
             return;
 
         } else if(mulWeight == "small") {
 
-            int tempHealth = (int)(eHealth * smallWeightMultiplier);
+            tempHealth = (int)(eHealth * smallWeightMultiplier);
             dm.setEnemyHealth(tempHealth);
 
-            int tempDamage = (int)(eDamage * smallWeightMultiplier);
+            tempDamage = (int)(eDamage * smallWeightMultiplier);
 
             if(tempDamage == eDamage) {
                 tempDamage++;
             }
+
+            tempSpawnAmount = eSpawn + 1;
+            dm.setEnemySpawnAmount(tempSpawnAmount);
 
             dm.setEnemyDamage(tempDamage);
 
         } else if(mulWeight == "medium") {
 
-            int tempHealth = (int)(eHealth * mediumWeightMultiplier);
+            tempHealth = (int)(eHealth * mediumWeightMultiplier);
             dm.setEnemyHealth(tempHealth);
 
-            int tempDamage = (int)(eDamage * mediumWeightMultiplier);
+            tempDamage = (int)(eDamage * mediumWeightMultiplier);
 
             if(tempDamage == eDamage) {
                 tempDamage++;
             }
+
+            tempSpawnAmount = eSpawn + 2;
+            dm.setEnemySpawnAmount(tempSpawnAmount);
 
             dm.setEnemyDamage(tempDamage);
 
         } else if(mulWeight == "high") {
 
-            int tempHealth = (int)(eHealth * highWeightMultiplier);
+            tempHealth = (int)(eHealth * highWeightMultiplier);
             dm.setEnemyHealth(tempHealth);
 
-            int tempDamage = (int)(eDamage * highWeightMultiplier);
+            tempDamage = (int)(eDamage * highWeightMultiplier);
 
             if(tempDamage == eDamage) {
                 tempDamage++;
             }
 
+            tempSpawnAmount = eSpawn + 3;
+            dm.setEnemySpawnAmount(tempSpawnAmount);
+
             dm.setEnemyDamage(tempDamage);
 
         }
+
+        if(tempHealth < eHealth && tempDamage < eDamage) {
+            tempHealth = eHealth;
+            tempDamage = eDamage;
+        } else if(tempHealth < eHealth) {
+            tempHealth = eHealth;
+        } else if(tempDamage < eDamage) {
+            tempDamage = eDamage;
+        }
+        
+        if(tempSpawnAmount < eSpawn) {
+            tempSpawnAmount = eSpawn;
+        }
+
+        Debug.Log("Previous Enemy Health: " + eHealth + ", New Enemy Health: " + tempHealth);
+        Debug.Log("Previous Enemy Damage: " + eDamage + ", New Enemy Damage: " + tempDamage);
+        Debug.Log("Previous Enemy Spawn Amount: " + eSpawn + ", New Enemy Spawn Amount: " + (tempSpawnAmount));
 
         updateManagers("all");
     }
