@@ -52,7 +52,7 @@ public class Multiplier : MonoBehaviour
         }
     }
 
-    private void basicMultiplierCal() {
+    public void basicMultiplierCal() {
         int pHealth = dm.getPlayerHealth();
         int pDamage = dm.getPlayerDamage();
         int eHealth = dm.getEnemyHealth();
@@ -82,7 +82,7 @@ public class Multiplier : MonoBehaviour
         updateManagers("all"); 
     }
 
-    private void playerMultiplierCal(string mulWeight = "") {
+    public void playerMultiplierCal(string mulWeight = "") {
         int pHealth = dm.getPlayerHealth();
         int pDamage = dm.getPlayerDamage();
         int tempHealth = 0;

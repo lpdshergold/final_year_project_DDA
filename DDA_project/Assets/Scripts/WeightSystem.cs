@@ -13,24 +13,24 @@ public class WeightSystem : MonoBehaviour {
 
     private bool doOnce = false;
 
-    private int playerLvl = 1;
+    public int playerLvl = 1;
 
-    private int playerWeighting = 0;
-    private int enemyWeighting = 0;
+    public int playerWeighting = 0;
+    public int enemyWeighting = 0;
 
-    private string pWeighting = "";
-    private string eWeighting = "";
+    public string pWeighting = "";
+    public string eWeighting = "";
 
-    private int playerHealth, playerMaxHealth, playerDeaths, playerDamageHits, enemyDamageHits, enemySpawnAmount;
+    public int playerHealth, playerMaxHealth, playerDeaths, playerDamageHits, enemyDamageHits, enemySpawnAmount;
 
-    private List<int> allPlayerHealth = new List<int>();
-    private List<int> allPlayerDeaths = new List<int>();
-    private List<int> allPlayerDamageHits = new List<int>();
-    private List<int> allEnemyDamageHits = new List<int>();
-    private List<KeyValuePair<int, int>> allIndividualEnemyHitsOnPlayer = new List<KeyValuePair<int, int>>();
-    private List<KeyValuePair<int, bool>> checkEnemyMovementStatus = new List<KeyValuePair<int, bool>>();
+    public List<int> allPlayerHealth = new List<int>();
+    public List<int> allPlayerDeaths = new List<int>();
+    public List<int> allPlayerDamageHits = new List<int>();
+    public List<int> allEnemyDamageHits = new List<int>();
+    public List<KeyValuePair<int, int>> allIndividualEnemyHitsOnPlayer = new List<KeyValuePair<int, int>>();
+    public List<KeyValuePair<int, bool>> checkEnemyMovementStatus = new List<KeyValuePair<int, bool>>();
 
-    void Start() {
+    public void Start() {
         rulebook = GameObject.Find("DifficultyManager").GetComponent<Rulebook>();
     }
 
@@ -78,7 +78,7 @@ public class WeightSystem : MonoBehaviour {
         weighting();
     }
 
-    private void weighting() {
+    public void weighting() {
 
         if(playerWeighting == 0) {
             pWeighting = "none";
@@ -106,7 +106,7 @@ public class WeightSystem : MonoBehaviour {
         rulebook.setWeightLvl(pWeighting, eWeighting);
     }
 
-    private void playerHealthWeighting() { // player weighting 
+    public void playerHealthWeighting() { // player weighting 
         if(playerLvl <= 3) {
 
             if(playerHealth == playerMaxHealth || playerHealth >= Convert.ToDouble((playerMaxHealth / 100) * 71)) {
@@ -135,7 +135,7 @@ public class WeightSystem : MonoBehaviour {
         }
     }
 
-    private void playerDeathWeighting() { // player weighting
+    public void playerDeathWeighting() { // player weighting
         if(playerLvl <= 3) {
             if(playerDeaths == 0) {
                 return;
@@ -171,7 +171,7 @@ public class WeightSystem : MonoBehaviour {
         }
     }
 
-    private void playerDamageHitsWeighting() { // player weighting
+    public void playerDamageHitsWeighting() { // player weighting
         if(playerLvl <= 3) {
 
             double seventyFiveDamageCheck = Convert.ToDouble(playerDamageHits / 100.0) * 75.0;
@@ -213,7 +213,7 @@ public class WeightSystem : MonoBehaviour {
     // one to check the hits on player from dead enemies - maybe also look at ones that have been triggered and hit the player as well for this
     // using the player death for the third weighting - may change
 
-    private void enemySeenPlayerWeighting() {
+    public void enemySeenPlayerWeighting() {
         List<KeyValuePair<int, bool>> tempList = checkEnemyMovementStatus;
 
         int enemySeenPlayer = 0, enemyNotSeenPlayer = 0, tempPlayerLvl = 0, enemyLvlInList = 0;
@@ -257,7 +257,7 @@ public class WeightSystem : MonoBehaviour {
         }
     }
 
-    private void enemyHitPlayerWeighting() {
+    public void enemyHitPlayerWeighting() {
         List<KeyValuePair<int, int>> tempList = allIndividualEnemyHitsOnPlayer;
 
         int enemyCount = 0, enemyDamage = 0, tempPlayerLvl = 0, enemyLvlInList = 0;
@@ -353,7 +353,7 @@ public class WeightSystem : MonoBehaviour {
         return tempAverage;
     }
 
-    private int averageOfLastThreeLevels(List<int> averageList) {
+    public int averageOfLastThreeLevels(List<int> averageList) {
         List<int> tempList = averageList;
         int tempAverage = 0;
 
